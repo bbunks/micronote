@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  --primary-lighter: #ff8d8d;
+  --primary-light: #ff6c6c;
+  --primary: #ff5c5c;
+  --primary-dark: #e65353;
+  --primary-darker: #b34040;
+  --secondary-lighter: #4daef8;
+  --secondary-light: #4daef8;
+  --secondary: #008bf5;
+  --secondary-dark: #007ddd;
+  --secondary-darker: #0061ac;
+  --neutral-100: #ffffff;
+  --neutral-200: #eff1f0;
+  --neutral-300: #dfe3e1;
+  --neutral-400: #cfd5d2;
+  --neutral-500: #bec6c2;
+  --neutral-600: #999f9e;
+  --neutral-700: #73787a;
+  --neutral-800: #4d5156;
+  --neutral-900: #272932;
+  --success: #00e070;
+  --warning: #fde05e;
+  --error: #ff5c5c;
+  background-color: var(--primary);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Hammersmith One", sans-serif;
+}
+
+.center-or-space {
+  justify-content: space-between;
+}
+
+.center-or-space > :only-child {
+  margin: auto;
+}
