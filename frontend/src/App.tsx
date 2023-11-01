@@ -1,3 +1,4 @@
+import { Index } from "./components/pages/index";
 import { Header } from "./components/shared/Header";
 import { Button } from "./components/shared/input/Button";
 import { Card } from "./components/shared/input/Card";
@@ -8,6 +9,16 @@ function App() {
   return (
     <>
       <Header />
+      <Index />
+    </>
+  );
+}
+
+export default App;
+
+function TestComponents() {
+  return (
+    <>
       <Button>Hello</Button>
       <Button variant="PrimaryInverse">Hello</Button>
       <Button variant="Neutral">Hello</Button>
@@ -25,5 +36,3 @@ function App() {
     </>
   );
 }
-
-export default App;

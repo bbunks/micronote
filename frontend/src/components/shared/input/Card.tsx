@@ -8,7 +8,8 @@ export function Card({ children, classNames }: PropsWithChildren<Props>) {
   return (
     <div
       className={
-        "bg-neutral-100 rounded-[24px] p-4 flex flex-col gap-4 " + classNames
+        "bg-neutral-100 rounded-[24px] p-4 flex flex-col gap-4 overflow-clip " +
+        classNames
       }
     >
       {children}

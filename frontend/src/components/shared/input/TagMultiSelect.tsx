@@ -1,5 +1,5 @@
 import Select from "react-select";
-import { TagChip } from "./TagChip";
+import { SelectTagChip } from "./TagChip";
 import { useTags } from "../../../stores/TagsStore";
 
 interface Props {
@@ -40,7 +40,7 @@ export function MultiSelect({ inputLabel, className }: Props) {
           option: () => "hover:bg-gray-500 hover:bg-opacity-10 p-3",
         }}
         components={{
-          MultiValueContainer: TagChip,
+          MultiValueContainer: SelectTagChip,
         }}
       />
     </div>
