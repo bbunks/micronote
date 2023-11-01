@@ -77,6 +77,11 @@ export function updateNotes() {
   // TODO: fetch data from an api
 }
 
+export function addNote(note: Note) {
+  notesWatcher.value.push(note);
+  notesWatcher.triggerListeners();
+}
+
 export function useNotes() {
   updateNotes();
 

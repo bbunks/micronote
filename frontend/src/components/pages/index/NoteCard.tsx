@@ -17,8 +17,8 @@ export function NoteCard({ data: { note } }: Props) {
   return (
     <Card>
       {images && images?.length > 0 && (
-        <div className="-m-4">
-          <img className="min-h-12" src={images[0].path} />
+        <div className="-m-4 mb-0">
+          <img className="min-h-[100px]" src={images[0].path} />
           {/* {images.length > 1 && (
             <div className="flex flex-row">
               {images.map((ele) => (

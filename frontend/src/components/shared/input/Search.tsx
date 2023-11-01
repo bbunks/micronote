@@ -13,7 +13,7 @@ export function Search({
   name,
 }: PropsWithChildren<React.InputHTMLAttributes<HTMLInputElement> & Props>) {
   return (
-    <div className="flex flex-row bg-neutral-100 px-6 py-3 rounded-full items-center gap-3 flex-grow max-w-[800px] mx-[72px]">
+    <div className="flex flex-row bg-neutral-100 px-4 py-3 rounded-full items-center gap-3 flex-grow max-w-[800px] mx-[72px]">
       <FontAwesomeIcon className="text-neutral-900" icon={faMagnifyingGlass} />
       <input
         id={name}
