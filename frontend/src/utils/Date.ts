@@ -4,6 +4,7 @@ export function DateToString(date: DateTime) {
   const today = DateTime.now().startOf("day");
 
   if (today === date.startOf("day")) {
+    // TODO: Fix this
     return date.toLocaleString({
       hour: "numeric",
       minute: "2-digit",
