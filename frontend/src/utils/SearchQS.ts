@@ -31,10 +31,13 @@ export function fromSearchString(input: string): SearchObject[] {
       value: ele[1],
     }))
   );
-  return Object.entries(qs.parse(input.slice(1))).map((ele) => ({
-    type: ele[0],
-    value: ele[1],
-  }));
+  return Object.entries(qs.parse(input.slice(1))).map(
+    (ele) =>
+      ({
+        type: ele[0],
+        value: ele[1],
+      } as SearchObject)
+  );
 }
 
 export function mapToSearchObject(
