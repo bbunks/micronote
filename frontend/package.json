@@ -13,6 +13,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@tanstack/react-router": "0.0.1-beta.207",
+    "@tanstack/router-devtools": "0.0.1-beta.207",
     "luxon": "^3.4.3",
     "masonic": "^3.7.0",
     "react": "^18.2.0",
