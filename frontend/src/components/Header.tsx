@@ -1,4 +1,4 @@
-import { useHeaderHook } from "../../stores/HeaderSettingsStore";
+import { useHeaderHook } from "../stores/HeaderSettingsStore";
 import { Logo } from "./Logo";
 import { Button } from "./input/Button";
 

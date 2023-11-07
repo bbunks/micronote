@@ -62,9 +62,9 @@ I will use GitHub for storing the repo and the GitHub Actions to deploy the code
 
 I plan on building the application to a Docker container and then deploying that on AWS app runner. To do this, I will create an Artifact Registry on AWS and upload all built docker containers to that for easy auto-deploying to AppRunner. 
 
-There will be no human input required for anything other than developing the actual application.
+There will be no human input required for anything other than developing the actual application as everything will be automated by GitHub Actions.
 
-There will be costs associated with AWR App Runner and the domain name.
+There will be costs associated upkeep of the app. AppRunner will cost 5 dollars a month to keep running and will scale up in pricing depending on usage. The domain for the app will cost 10 dollars a year. The first 5GB of data stored in the Planet Scale will be free and then 30 dollars a month after that. For labor, I will be the primary developer. I will work for 100% profit. The app currently has no form of monetization so the labor will be free. The app also does not have enough work to justify more than 1 or 2 people for the time being so it will be a side project.
 
 
 

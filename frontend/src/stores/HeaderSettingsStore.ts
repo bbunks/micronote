@@ -31,6 +31,10 @@ export function showLogo(show: boolean) {
   settingsWatcher.triggerListeners();
 }
 
+export function resetHeader() {
+  settingsWatcher.value = { ...DEAFULT_SETTINGS };
+}
+
 export function useHeaderHook() {
   return useWatcherState<HeaderSettings>(settingsWatcher)[0];
 }

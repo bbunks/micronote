@@ -2,6 +2,7 @@ import { Watcher } from "wal.js";
 import { useWatcherState } from "react-state-extended";
 import { Note } from "../types/Note";
 import { DateTime } from "luxon";
+import { parse, stringify } from "qs";
 
 const noteTemplate: Note = {
   id: 1,
@@ -12,7 +13,7 @@ const noteTemplate: Note = {
   },
   tags: [
     {
-      label: "Pictures",
+      label: "Idea",
       color: "var(--primary)",
       id: 1,
     },
@@ -40,8 +41,6 @@ const imgTemplate: Note = {
   ],
 };
 
-let isLoading = false;
-
 const tempList: Note[] = [
   noteTemplate,
   imgTemplate,
@@ -58,7 +57,10 @@ const tempList: Note[] = [
   noteTemplate,
 ];
 
+let isLoading = false;
+
 export const notesWatcher = new Watcher<Note[]>([]);
+export const queryWatcher = new Watcher(parse(window.location.search));
 
 let nextUpdateTime: Date;
 

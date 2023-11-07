@@ -1,6 +1,6 @@
 import Select from "react-select";
 import { SelectTagChip } from "./TagChip";
-import { useTags } from "../../../stores/TagsStore";
+import { useTags } from "../../stores/TagsStore";
 
 interface Props {
   inputLabel?: string;
