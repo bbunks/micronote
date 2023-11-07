@@ -1,5 +1,5 @@
 import { Router, Route, RootRoute } from "@tanstack/react-router";
-import { Index } from "../components/pages/index/index";
+import { Index } from "./pages/index/index";
 import { RootLayout } from "./RootLayout.";
 
 // Create a root route

@@ -1,7 +1,7 @@
 import { Note } from "../../../types/Note";
 import { DateToString } from "../../../utils/Date";
-import { Card } from "../../shared/input/Card";
-import { TagChip } from "../../shared/input/TagChip";
+import { Card } from "../../../components/input/Card";
+import { TagChip } from "../../../components/input/TagChip";
 
 interface Props {
   data: {

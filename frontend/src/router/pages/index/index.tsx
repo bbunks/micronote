@@ -1,10 +1,10 @@
 import { useNotes } from "../../../stores/NoteStore";
-import { LoadingIndicator } from "../../shared/Loading";
+import { LoadingIndicator } from "../../../components/Loading";
 import { NoteCard } from "./NoteCard";
 import { Masonry } from "masonic";
 import { useEffect } from "react";
 import { setCentralElement } from "../../../stores/HeaderSettingsStore";
-import { Search } from "../../shared/input/Search";
+import { Search } from "../../../components/input/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 
