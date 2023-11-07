@@ -3,6 +3,7 @@ import { RootLayout } from "./RootLayout.";
 import { LandingPage } from "./pages/landing/LandingPage";
 import { LoginPage } from "./pages/login/LoginPage";
 import { AppPage } from "./pages/app/AppPage";
+import QueryString from "qs";
 
 // Create a root route
 const rootRoute = new RootRoute({
@@ -34,7 +35,14 @@ const routeTree = rootRoute.addChildren([
 ]);
 
 // Create the router using your route tree
-export const router = new Router({ routeTree });
+export const router = new Router({
+  routeTree,
+  parseSearch: (a) => {
+    return QueryString.parse(a.slice(1));
+  },
+  stringifySearch: (a) =>
+    QueryString.stringify(a).length > 0 ? "?" + QueryString.stringify(a) : "",
+});
 
 // Register your router for maximum type safety
 declare module "@tanstack/react-router" {

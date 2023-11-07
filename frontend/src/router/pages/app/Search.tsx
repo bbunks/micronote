@@ -47,7 +47,7 @@ export function Search() {
         options: [
           {
             type: "contains",
-            label: inputString,
+            label: 'Contains "' + inputString + '"',
             value: inputString,
           },
         ],

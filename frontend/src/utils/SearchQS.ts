@@ -17,27 +17,13 @@ export interface SearchOption {
 }
 
 export function toSearchString(input: SearchObject[]) {
-  return input
-    .reduce((p, i) => {
-      return p + i.type + "=" + i.value + "&";
-    }, "")
-    .slice(0, -1);
+  console.log(input);
+  return qs.stringify(input);
 }
 
 export function fromSearchString(input: string): SearchObject[] {
-  console.log(
-    Object.entries(qs.parse(input.slice(1))).map((ele) => ({
-      type: ele[0],
-      value: ele[1],
-    }))
-  );
-  return Object.entries(qs.parse(input.slice(1))).map(
-    (ele) =>
-      ({
-        type: ele[0],
-        value: ele[1],
-      } as SearchObject)
-  );
+  // @ts-expect-error because you can not strongly type a QS
+  return Object.values(qs.parse(input.slice(1))) as SearchObject[];
 }
 
 export function mapToSearchObject(

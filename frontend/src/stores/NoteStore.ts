@@ -58,6 +58,7 @@ queryWatcher.addListener((v) => {
   if (qs.length > 0) {
     qs = "?" + qs;
   }
+  console.log(qs);
   let newurl =
     window.location.protocol +
     "//" +
@@ -65,24 +66,42 @@ queryWatcher.addListener((v) => {
     window.location.pathname +
     qs;
   window.history.pushState({ path: newurl }, "", newurl);
+  console.log("Updating URL to: " + newurl);
 });
 
 let nextUpdateTime: Date;
 
-export function updateNotes() {
-  if (nextUpdateTime === undefined || nextUpdateTime.getTime() < Date.now()) {
+export function updateNotes(force?: boolean) {
+  if (
+    nextUpdateTime === undefined ||
+    nextUpdateTime.getTime() < Date.now() ||
+    force
+  ) {
+    console.log("H");
     const s = new Date();
     s.setMinutes(s.getMinutes() + 1);
     nextUpdateTime = s;
     isLoading = true;
 
     setTimeout(() => {
-      notesWatcher.value = [...tempList];
+      notesWatcher.value = [
+        ...tempList.filter((item) => {
+          const tags = queryWatcher.value.filter((ele) => (ele.type = "tag"));
+          if (tags.length == 0) return true;
+          // Filter tags based on whether their IDs match any of the tag IDs in tagIds array of objects
+          const matchingTags = item.tags.filter((tag) =>
+            tags.some((tagId) => parseInt(tagId.value) === tag.id)
+          );
+          return matchingTags.length > 0; // Check if there are matching tags
+        }),
+      ];
       isLoading = false;
     }, 1000);
   }
   // TODO: fetch data from an api
 }
+
+queryWatcher.addListener(() => updateNotes(true));
 
 export function addNote(note: Note) {
   notesWatcher.value.push(note);
