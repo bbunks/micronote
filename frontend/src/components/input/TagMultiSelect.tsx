@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-export function MultiSelect({ inputLabel, className }: Props) {
+export function TagMultiSelect({ inputLabel, className }: Props) {
   const tags = useTags();
 
   return (

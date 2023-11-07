@@ -2,7 +2,7 @@ import { Watcher } from "wal.js";
 import { useWatcherState } from "react-state-extended";
 import { Note } from "../types/Note";
 import { DateTime } from "luxon";
-import { parse, stringify } from "qs";
+import { fromSearchString, toSearchString } from "../utils/SearchQS";
 
 const noteTemplate: Note = {
   id: 1,
@@ -11,13 +11,7 @@ const noteTemplate: Note = {
   content: {
     text: "This is a longer message that will be used as an example in the body of a note.",
   },
-  tags: [
-    {
-      label: "Idea",
-      color: "var(--primary)",
-      id: 1,
-    },
-  ],
+  tags: [{ label: "Idea", id: 1, color: "var(--primary)" }],
 };
 
 const imgTemplate: Note = {
@@ -32,13 +26,7 @@ const imgTemplate: Note = {
       },
     ],
   },
-  tags: [
-    {
-      label: "Pictures",
-      color: "var(--primary)",
-      id: 1,
-    },
-  ],
+  tags: [{ label: "Picture", id: 2, color: "var(--secondary)" }],
 };
 
 const tempList: Note[] = [
@@ -60,7 +48,24 @@ const tempList: Note[] = [
 let isLoading = false;
 
 export const notesWatcher = new Watcher<Note[]>([]);
-export const queryWatcher = new Watcher(parse(window.location.search));
+export const queryWatcher = new Watcher(
+  fromSearchString(window.location.search)
+);
+
+//keep in sync with the qs
+queryWatcher.addListener((v) => {
+  let qs = toSearchString(v);
+  if (qs.length > 0) {
+    qs = "?" + qs;
+  }
+  let newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    qs;
+  window.history.pushState({ path: newurl }, "", newurl);
+});
 
 let nextUpdateTime: Date;
 
@@ -74,7 +79,7 @@ export function updateNotes() {
     setTimeout(() => {
       notesWatcher.value = [...tempList];
       isLoading = false;
-    }, 3000);
+    }, 1000);
   }
   // TODO: fetch data from an api
 }

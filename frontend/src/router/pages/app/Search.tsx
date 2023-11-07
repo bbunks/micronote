@@ -2,20 +2,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useWatcherState } from "react-state-extended";
 import { queryWatcher } from "../../../stores/NoteStore";
-import ReactSelect from "react-select";
+import ReactSelect, { MultiValueGenericProps } from "react-select";
 import { useTags } from "../../../stores/TagsStore";
 import { useState } from "react";
 import { arrayIfTrue } from "../../../utils/Array";
+import {
+  SearchObject,
+  SearchOption,
+  mapSearchObjects,
+  mapToSearchObject,
+} from "../../../utils/SearchQS";
+
+type Option = {
+  label: string;
+  options: SearchOption[];
+};
 
 export function Search() {
   const [query] = useWatcherState(queryWatcher);
   const [inputString, setInputString] = useState("");
   const tags = useTags();
 
-  const options = [
+  const options: Option[] = [
     {
       label: "Tags",
       options: tags.map((ele) => ({
+        type: "tag",
         label: ele.label,
         value: ele.id,
         color: ele.color,
@@ -24,16 +36,19 @@ export function Search() {
     {
       label: "Attachment Type",
       options: ["Picture"].map((ele) => ({
+        type: "attachment",
         label: ele,
         value: ele.toLowerCase(),
       })),
     },
-    ...arrayIfTrue(
+    ...arrayIfTrue<Option>(
       {
         label: "Text",
         options: [
           {
-            label: 'Contains "' + inputString + '"',
+            type: "contains",
+            label: inputString,
+            value: inputString,
           },
         ],
       },
@@ -52,6 +67,10 @@ export function Search() {
           isMulti
           placeholder="Search"
           options={options}
+          defaultValue={mapSearchObjects(query, tags)}
+          onChange={(v) => {
+            queryWatcher.value = v.map(mapToSearchObject) as SearchObject[];
+          }}
           unstyled
           classNames={{
             container: () =>
@@ -65,14 +84,44 @@ export function Search() {
               "bg-neutral-100 left-0 !top-[calc(100%+12px)] rounded-[24px] p-3 border-neutral-300 border-solid border",
             option: () => "hover:bg-gray-500 hover:bg-opacity-10 p-3",
             placeholder: () => "text-neutral-500",
+            multiValueRemove: () => "!m-0 !p-0",
           }}
           menuPosition="absolute"
           components={{
             DropdownIndicator: () => null,
+            MultiValueContainer: SelectTagChip,
           }}
           onInputChange={setInputString}
         />
       </div>
+    </div>
+  );
+}
+
+function SelectTagChip({
+  children,
+  ...props
+}: MultiValueGenericProps<SearchOption>) {
+  return (
+    <div className="bg-neutral-300 rounded-full pr-2 pl-1 flex items-center gap-1">
+      {props.data.type == "tag" && (
+        <>
+          <div
+            className="h-4 w-4 rounded-full"
+            style={{
+              backgroundColor: props.data.color,
+            }}
+          />
+          <p className="text-neutral-800 text-xs">tag: </p>
+        </>
+      )}
+      {props.data.type == "attachment" && (
+        <p className="pl-1 text-neutral-800 text-xs">attachment: </p>
+      )}
+      {props.data.type == "contains" && (
+        <p className="pl-1 text-neutral-800 text-xs">contains: </p>
+      )}
+      {children}
     </div>
   );
 }
