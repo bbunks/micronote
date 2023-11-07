@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: "micronote"
+      MYSQL_USER: "micronote"
+      MYSQL_PASSWORD: "asecurepassword"
+      MYSQL_ROOT_PASSWORD: "rootpassword"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - my-db:/var/lib/mysql
+volumes:
+  my-db:

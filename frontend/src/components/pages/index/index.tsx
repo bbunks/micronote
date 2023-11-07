@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 
 interface Props {
-  columnCount?: number;
+  columnWidth?: number;
 }
 
-export function Index({ columnCount = 3 }: Props) {
+export function Index({ columnWidth = 360 }: Props) {
   const { state: notes, isLoading } = useNotes();
 
   useEffect(() => {
@@ -27,13 +27,14 @@ export function Index({ columnCount = 3 }: Props) {
       </div>
     );
   }
+
   return (
     <div className="px-4">
       <div className="">
         <Masonry
           items={notes.map((ele) => ({ note: ele }))}
           columnGutter={16}
-          columnWidth={360}
+          columnWidth={columnWidth}
           overscanBy={5}
           render={NoteCard}
         />
