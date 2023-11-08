@@ -45,7 +45,8 @@ const tempList: Note[] = [
   noteTemplate,
 ];
 
-let isLoading = false;
+let isLoading = true;
+let isRevalidating = false;
 
 export const notesWatcher = new Watcher<Note[]>([]);
 export const queryWatcher = new Watcher(
@@ -81,7 +82,8 @@ export function updateNotes(force?: boolean) {
     const s = new Date();
     s.setMinutes(s.getMinutes() + 1);
     nextUpdateTime = s;
-    isLoading = true;
+    isRevalidating = true;
+    if (force) isLoading = true;
 
     setTimeout(() => {
       notesWatcher.value = [
@@ -96,6 +98,7 @@ export function updateNotes(force?: boolean) {
         }),
       ];
       isLoading = false;
+      isRevalidating = false;
     }, 1000);
   }
   // TODO: fetch data from an api
@@ -111,5 +114,5 @@ export function addNote(note: Note) {
 export function useNotes() {
   updateNotes();
 
-  return { state: useWatcherState(notesWatcher)[0], isLoading };
+  return { state: useWatcherState(notesWatcher)[0], isLoading, isRevalidating };
 }

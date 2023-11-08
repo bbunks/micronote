@@ -21,14 +21,14 @@ export function TextInput({
         <input
           id={name}
           name={name}
-          className="text-neutral-900 p-3 bg-transparent outline-none hover:bg-gray-500 hover:bg-opacity-10 focus:bg-gray-500 focus:bg-opacity-5"
+          className="text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5"
         />
       ) : (
         <textarea
           id={name}
           name={name}
           rows={lineCount}
-          className="text-neutral-900 p-3 bg-transparent outline-none hover:bg-gray-500 hover:bg-opacity-10 focus:bg-gray-500 focus:bg-opacity-5 resize-none"
+          className="text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5 resize-none"
         />
       )}
     </div>

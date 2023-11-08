@@ -2,7 +2,7 @@ import { useNotes } from "../../../stores/NoteStore";
 import { LoadingIndicator } from "../../../components/Loading";
 import { NoteCard } from "./NoteCard";
 import { Masonry } from "masonic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   resetHeader,
   setCentralElement,
@@ -10,6 +10,7 @@ import {
 import { Search } from "./Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { NewNote } from "./NewNote";
 
 interface Props {
   columnWidth?: number;
@@ -17,6 +18,7 @@ interface Props {
 
 export function AppPage({ columnWidth = 360 }: Props) {
   const { state: notes, isLoading } = useNotes();
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Implement Search bar into header
   useEffect(() => {
@@ -37,6 +39,7 @@ export function AppPage({ columnWidth = 360 }: Props) {
 
   return (
     <>
+      {modalOpen && <NewNote closeModal={() => setModalOpen(false)} />}
       <div className="px-4">
         <div className="">
           <Masonry
@@ -47,7 +50,10 @@ export function AppPage({ columnWidth = 360 }: Props) {
             render={NoteCard}
           />
         </div>
-        <button className="fixed bottom-4 right-4 z-10 h-16 w-16 rounded-full bg-neutral-900 text-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 active:bg-neutral-700 active:text-neutral-200">
+        <button
+          onClick={() => setModalOpen(true)}
+          className="fixed bottom-4 right-4 z-10 h-16 w-16 rounded-full bg-neutral-900 text-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 active:bg-neutral-700 active:text-neutral-200"
+        >
           <FontAwesomeIcon icon={faPlus} size="lg" />
         </button>
       </div>

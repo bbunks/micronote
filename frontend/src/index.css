@@ -44,6 +44,10 @@ body {
   margin: auto;
 }
 
+.p-transition {
+  transition: padding 0.1s;
+}
+
 .lds-ellipsis {
   display: inline-block;
   position: relative;

@@ -3,7 +3,7 @@ import { Watcher } from "wal.js";
 import { useWatcherState } from "react-state-extended";
 
 const DEAFULT_SETTINGS: HeaderSettings = {
-  showProfile: false,
+  showProfile: true,
   centralElement: null,
   showLogo: true,
 };
