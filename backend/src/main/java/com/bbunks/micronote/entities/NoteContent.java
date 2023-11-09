@@ -1,18 +1,19 @@
 package com.bbunks.micronote.entities;
 
-import com.bbunks.micronote.enums.AttachmentType;
+import com.bbunks.micronote.enums.ContentType;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-public class Attachment {
+public class NoteContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private AttachmentType attachmentType;
-    private String path;
+    @Enumerated(EnumType.STRING)
+    private ContentType type;
+    private String value;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

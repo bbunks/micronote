@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private List<Note> notes;
 
     @OneToMany(mappedBy = "user")
-    private List<Attachment> attachments;
+    private List<NoteContent> attachments;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

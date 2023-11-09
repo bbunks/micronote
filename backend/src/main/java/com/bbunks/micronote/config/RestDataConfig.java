@@ -1,6 +1,6 @@
 package com.bbunks.micronote.config;
 
-import com.bbunks.micronote.entities.Attachment;
+import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.Tag;
 import com.bbunks.micronote.entities.User;
@@ -14,8 +14,8 @@ public class RestDataConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        config.exposeIdsFor(Attachment.class);
-        config.exposeIdsFor(Note.class);
+        // config.exposeIdsFor(NoteContent.class);
+        // config.exposeIdsFor(Note.class);
         config.exposeIdsFor(Tag.class);
         config.exposeIdsFor(User.class);
         config.setDefaultPageSize(Integer.MAX_VALUE);

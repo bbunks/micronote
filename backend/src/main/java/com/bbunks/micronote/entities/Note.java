@@ -12,12 +12,12 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String text;
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "note")
-    private List<Attachment> attachments;
+    private List<NoteContent> contents;
 }
