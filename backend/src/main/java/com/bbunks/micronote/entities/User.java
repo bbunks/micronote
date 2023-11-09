@@ -25,8 +25,6 @@ public class User implements UserDetails {
 
     @Email
     private String email;
-
-    
     private String password;
     private boolean enabled;
 
