@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Attachment> attachments;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

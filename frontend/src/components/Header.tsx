@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/react-router";
 import { useHeaderHook } from "../stores/HeaderSettingsStore";
 import { Logo } from "./Logo";
 import { Button } from "./input/Button";
@@ -12,24 +11,7 @@ export function Header() {
         {currentSettings.showLogo && <Logo />}
         {currentSettings.centralElement && currentSettings.centralElement}
         {currentSettings.showProfile && (
-          <Button
-            variant="PrimaryInverse"
-            onClick={() => {
-              const headers = new Headers();
-              headers.set(
-                "Authorization",
-                "Basic " + btoa("brenden" + ":" + "test123")
-              );
-
-              fetch("/api", {
-                headers,
-              })
-                .then((res) => res.json())
-                .then((res) => console.log(res));
-            }}
-          >
-            Profile
-          </Button>
+          <Button variant="PrimaryInverse">Profile</Button>
         )}
       </div>
       <div className="h-header-height w-full" />

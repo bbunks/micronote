@@ -18,10 +18,13 @@ public class UserDataBootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        User brenden = new User();
-        brenden.setFirstName("Brenden");
-        brenden.setLastName("Bunker");
-        brenden.setEmail("brendenbunker@gmail.com");
-        brenden.setPassword("{bcrypt}$2y$06$LrRvvzRloxheI95p5TyOTeig1WvixHt/smvHcrzAn6OuaYkX25eh.");
+        if (userService.getCount() == 0) {
+            User brenden = new User();
+            brenden.setFirstName("Brenden");
+            brenden.setLastName("Bunker");
+            brenden.setEmail("brendenbunker@gmail.com");
+            brenden.setPassword("{bcrypt}$2y$06$LrRvvzRloxheI95p5TyOTeig1WvixHt/smvHcrzAn6OuaYkX25eh.");
+            userService.save(brenden);
+        }
     }
 }
