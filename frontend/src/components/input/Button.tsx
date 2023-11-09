@@ -7,11 +7,15 @@ interface Props {
 export function Button({
   children,
   variant,
+  className,
   ...props
 }: PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement> & Props>) {
   let style = variants[variant ?? "Primary"];
   return (
-    <button className={"px-6 py-3 rounded-full " + style} {...props}>
+    <button
+      className={"px-6 py-3 rounded-full " + style + " " + className}
+      {...props}
+    >
       {children}
     </button>
   );

@@ -5,6 +5,7 @@ export default {
     extend: {
       height: {
         "header-height": "96px",
+        "remaining-height": "calc(100vh - 96px)",
       },
       space: {
         "header-height": "96px",
