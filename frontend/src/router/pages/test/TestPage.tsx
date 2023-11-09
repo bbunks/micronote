@@ -7,6 +7,7 @@ import { JwtTokenWatcher } from "../../../stores/AuthStore";
 
 export function TestPage() {
   const [jwtState, setJwtState] = useState("");
+  const [reqURL, setReqURL] = useState("");
   let decode = decodeJWT(jwtState);
   let exp = "";
   let iat = "";
@@ -26,6 +27,13 @@ export function TestPage() {
 
   return (
     <div>
+      <TextInput
+        inputLabel="Request URL"
+        className="m-8"
+        inputClassName="bg-white"
+        onChange={(e) => setReqURL(e.target.value)}
+        value={reqURL}
+      />
       <Button
         onClick={() => {
           AuthService.generateToken(
@@ -38,11 +46,25 @@ export function TestPage() {
           );
         }}
       >
-        Login
+        gmail
       </Button>
       <Button
         onClick={() => {
-          AuthService.makeAuthorizedRequest("/api")
+          AuthService.generateToken(
+            "brenden@bbunks.com",
+            "test123",
+            (token) => {
+              console.log(token);
+              JwtTokenWatcher.value = token;
+            }
+          );
+        }}
+      >
+        bbunks
+      </Button>
+      <Button
+        onClick={() => {
+          AuthService.makeAuthorizedRequest(reqURL)
             .then((res) => res.json())
             .then((res) => console.log(res));
         }}

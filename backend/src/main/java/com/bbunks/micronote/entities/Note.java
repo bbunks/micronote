@@ -1,12 +1,18 @@
 package com.bbunks.micronote.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +22,24 @@ public class Note {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "note")
     private List<NoteContent> contents;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "note_tag",
+            joinColumns = @JoinColumn(name = "note_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
+
+    @CreatedDate
+    private Date createdDate;
+    
+    @LastModifiedDate
+
+    private Date lastUpdate;
 }

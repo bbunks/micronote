@@ -1,6 +1,7 @@
 package com.bbunks.micronote.entities;
 
 import com.bbunks.micronote.enums.ContentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,9 +18,11 @@ public class NoteContent {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "note_id")
+    @JsonIgnore
     private Note note;
 }

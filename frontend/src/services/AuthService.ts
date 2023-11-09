@@ -42,7 +42,7 @@ function logout() {
 const AuthService = {
   generateToken,
   makeAuthorizedRequest,
-  logout
+  logout,
 };
 
 export default AuthService;

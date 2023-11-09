@@ -35,10 +35,8 @@ public class SecurityConfiguration {
         return http.authorizeHttpRequests((config) ->
                         config
                                 .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/api").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/api").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/api").authenticated()
+                                .requestMatchers("/api").authenticated()
+                                .requestMatchers("/api/**").authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)

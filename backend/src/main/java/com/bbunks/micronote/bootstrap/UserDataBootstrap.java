@@ -8,13 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserDataBootstrap implements CommandLineRunner {
-
-    private UserService userService;
-
     @Autowired
-    public UserDataBootstrap(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     @Override
     public void run(String... args) {

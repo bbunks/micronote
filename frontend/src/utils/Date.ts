@@ -1,9 +1,10 @@
 import { DateTime } from "luxon";
 
-export function DateToString(date: DateTime) {
+export function DateToString(dateString: string) {
+  const date = DateTime.fromISO(dateString);
   const today = DateTime.now().startOf("day");
 
-  if (today === date.startOf("day")) {
+  if (today <= date.startOf("day")) {
     // TODO: Fix this
     return date.toLocaleString({
       hour: "numeric",

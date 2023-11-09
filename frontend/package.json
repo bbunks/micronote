@@ -20,6 +20,7 @@
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-select": "^5.7.7",
     "react-state-extended": "^2.0.2",
     "wal.js": "^1.1.3"

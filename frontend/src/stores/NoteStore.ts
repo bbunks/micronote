@@ -1,49 +1,10 @@
 import { Watcher } from "wal.js";
 import { useWatcherState } from "react-state-extended";
 import { Note } from "../types/Note";
-import { DateTime } from "luxon";
 import { fromSearchString, toSearchString } from "../utils/SearchQS";
-
-const noteTemplate: Note = {
-  id: 1,
-  title: "This is a title",
-  date: DateTime.now(),
-  content: {
-    text: "This is a longer message that will be used as an example in the body of a note.",
-  },
-  tags: [{ label: "Idea", id: 1, color: "var(--primary)" }],
-};
-
-const imgTemplate: Note = {
-  id: 1,
-  title: "This is a title",
-  date: DateTime.now(),
-  content: {
-    attachments: [
-      {
-        type: "image",
-        path: "/sunset.jpg",
-      },
-    ],
-  },
-  tags: [{ label: "Picture", id: 2, color: "var(--secondary)" }],
-};
-
-const tempList: Note[] = [
-  noteTemplate,
-  imgTemplate,
-  noteTemplate,
-  imgTemplate,
-  noteTemplate,
-  noteTemplate,
-  noteTemplate,
-  imgTemplate,
-  noteTemplate,
-  noteTemplate,
-  imgTemplate,
-  noteTemplate,
-  noteTemplate,
-];
+import AuthService from "../services/AuthService";
+import { JwtTokenWatcher } from "./AuthStore";
+import { isTokenExpired } from "../utils/JWT";
 
 let isLoading = true;
 let isRevalidating = false;
@@ -72,7 +33,7 @@ queryWatcher.addListener((v) => {
 
 let nextUpdateTime: Date;
 
-export function updateNotes(force?: boolean) {
+export function updateNotes(jwt: string, force?: boolean) {
   if (
     nextUpdateTime === undefined ||
     nextUpdateTime.getTime() < Date.now() ||
@@ -85,26 +46,22 @@ export function updateNotes(force?: boolean) {
     isRevalidating = true;
     if (force) isLoading = true;
 
-    setTimeout(() => {
-      notesWatcher.value = [
-        ...tempList.filter((item) => {
-          const tags = queryWatcher.value.filter((ele) => (ele.type = "tag"));
-          if (tags.length == 0) return true;
-          // Filter tags based on whether their IDs match any of the tag IDs in tagIds array of objects
-          const matchingTags = item.tags.filter((tag) =>
-            tags.some((tagId) => parseInt(tagId.value) === tag.id)
-          );
-          return matchingTags.length > 0; // Check if there are matching tags
-        }),
-      ];
-      isLoading = false;
-      isRevalidating = false;
-    }, 1000);
+    if (!isTokenExpired(jwt)) {
+      AuthService.makeAuthorizedRequest("/api/note")
+        .then((res) => res.json())
+        .then((json) => {
+          notesWatcher.value = json;
+          isLoading = false;
+          isRevalidating = false;
+        });
+    }
   }
   // TODO: fetch data from an api
 }
 
-queryWatcher.addListener(() => updateNotes(true));
+queryWatcher.addListener(() => updateNotes(JwtTokenWatcher.value, true));
+
+JwtTokenWatcher.addListener((v) => updateNotes(v, true));
 
 export function addNote(note: Note) {
   notesWatcher.value.push(note);
@@ -112,7 +69,7 @@ export function addNote(note: Note) {
 }
 
 export function useNotes() {
-  updateNotes();
+  updateNotes(JwtTokenWatcher.value);
 
   return { state: useWatcherState(notesWatcher)[0], isLoading, isRevalidating };
 }
