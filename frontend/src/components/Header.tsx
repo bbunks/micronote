@@ -7,7 +7,7 @@ export function Header() {
 
   return (
     <>
-      <div className="p-6 flex flex-row items-center h-header-height center-or-space fixed top-0 left-0 right-0 bg-primary z-10">
+      <div className="p-6 gap-4 flex flex-row items-center h-header-height center-or-space fixed top-0 left-0 right-0 bg-primary z-10">
         {currentSettings.showLogo && <Logo />}
         {currentSettings.centralElement && currentSettings.centralElement}
         {currentSettings.showProfile && (

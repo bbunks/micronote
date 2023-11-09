@@ -35,9 +35,14 @@ function makeAuthorizedRequest(uri: string, options?: RequestInit) {
   });
 }
 
+function logout() {
+  JwtTokenWatcher.value = "";
+}
+
 const AuthService = {
   generateToken,
   makeAuthorizedRequest,
+  logout
 };
 
 export default AuthService;

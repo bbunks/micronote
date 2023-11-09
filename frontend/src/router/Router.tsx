@@ -5,6 +5,7 @@ import { LoginPage } from "./pages/login/LoginPage";
 import { AppPage } from "./pages/app/AppPage";
 import QueryString from "qs";
 import { TestPage } from "./pages/test/TestPage";
+import { LogoutPage } from "./pages/logout/LogoutPage";
 
 // Create a root route
 const rootRoute = new RootRoute({
@@ -24,6 +25,12 @@ const loginRoute = new Route({
   component: LoginPage,
 });
 
+const logoutRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/logout",
+  component: LogoutPage,
+});
+
 const appRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/app",
@@ -38,7 +45,7 @@ const testRoute = new Route({
 
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
-  indexRoute.addChildren([loginRoute, appRoute, testRoute]),
+  indexRoute.addChildren([loginRoute, appRoute, testRoute, logoutRoute]),
 ]);
 
 // Create the router using your route tree
