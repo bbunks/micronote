@@ -5,9 +5,11 @@ import { Button } from "../../../components/input/Button";
 import { resetHeader, showProfile } from "../../../stores/HeaderSettingsStore";
 import { useNavigate } from "@tanstack/react-router";
 import AuthService from "../../../services/AuthService";
-import { JwtTokenWatcher } from "../../../stores/AuthStore";
+import {
+  AuthenticatedWatcher,
+  AuthenticationState,
+} from "../../../stores/AuthStore";
 import { useWatcherState } from "react-state-extended";
-import { isTokenExpired } from "../../../utils/JWT";
 
 export function LoginPage() {
   useEffect(() => {
@@ -16,13 +18,13 @@ export function LoginPage() {
   }, []);
   const navigate = useNavigate({ from: "/login" });
 
-  const [jwtToken] = useWatcherState(JwtTokenWatcher);
+  const [authenticated] = useWatcherState(AuthenticatedWatcher);
 
   useEffect(() => {
-    if (jwtToken && !isTokenExpired(jwtToken)) {
+    if (authenticated === AuthenticationState.Unauthorized) {
       navigate({ to: "/app" });
     }
-  }, [jwtToken, navigate]);
+  }, [authenticated, navigate]);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -47,10 +49,7 @@ export function LoginPage() {
         />
         <Button
           onClick={() => {
-            AuthService.generateToken(username, password, (token) => {
-              JwtTokenWatcher.value = token;
-              navigate({ to: "/app" });
-            });
+            AuthService.login(username, password);
           }}
         >
           Login

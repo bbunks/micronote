@@ -21,18 +21,15 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(String userName) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
+    public String generateToken(String userName, long minutes) {
+        return createToken(userName, minutes);
     }
 
-    private String createToken(Map<String, Object> claims, String userName) {
-
+    private String createToken(String userName, long minutes) {
         return Jwts.builder()
-                .claims(claims)
                 .subject(userName)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * minutes))
                 .signWith(getSignKey())
                 .compact();
     }
@@ -69,6 +66,7 @@ public class JwtService {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
+
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

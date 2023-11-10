@@ -43,6 +43,11 @@ export function AppPage({ columnWidth = 360 }: Props) {
     <>
       {modalOpen && <NewNote closeModal={() => setModalOpen(false)} />}
       <div className="px-4">
+        {notes.length === 0 && (
+          <p className="text-center m-12 text-primary-lighter">
+            What are you thinking? Write it down.
+          </p>
+        )}
         <div className="">
           <Masonry
             key={iter.current}

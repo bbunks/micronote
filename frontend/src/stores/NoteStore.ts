@@ -3,13 +3,12 @@ import { useWatcherState } from "react-state-extended";
 import { Note } from "../types/Note";
 import { fromSearchString, toSearchString } from "../utils/SearchQS";
 import AuthService from "../services/AuthService";
-import { JwtTokenWatcher } from "./AuthStore";
-import { isTokenExpired } from "../utils/JWT";
+import { AuthenticatedWatcher, AuthenticationState } from "./AuthStore";
 
-let isLoading = true;
+let isLoading = false;
 let isRevalidating = false;
 
-export const notesWatcher = new Watcher<Note[]>([]);
+export const notesWatcher = new Watcher<Note[] | null>(null);
 export const queryWatcher = new Watcher(
   fromSearchString(window.location.search)
 );
@@ -30,6 +29,7 @@ queryWatcher.addListener((v) => {
 });
 
 let nextUpdateTime: Date;
+let controller = new AbortController();
 
 export function updateNotes(force?: boolean) {
   if (
@@ -37,36 +37,41 @@ export function updateNotes(force?: boolean) {
     nextUpdateTime.getTime() < Date.now() ||
     force
   ) {
-    const s = new Date();
-    s.setMinutes(s.getMinutes() + 1);
-    nextUpdateTime = s;
+    if (isLoading && force) controller.abort();
+    else if (isLoading) return;
+    controller = new AbortController();
     isRevalidating = true;
     if (force) isLoading = true;
 
-    if (!isTokenExpired(JwtTokenWatcher.value)) {
-      AuthService.makeAuthorizedRequest("/api/note")
-        .then((res) => res.json())
-        .then((json) => {
-          notesWatcher.value = json;
-          isLoading = false;
-          isRevalidating = false;
-        });
-    }
+    AuthService.makeAuthorizedRequest("/api/note", {
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        notesWatcher.value = json;
+        isLoading = false;
+        isRevalidating = false;
+
+        const s = new Date();
+        s.setMinutes(s.getMinutes() + 1);
+        nextUpdateTime = s;
+      })
+      .catch(() => {});
   }
   // TODO: fetch data from an api
 }
 
 queryWatcher.addListener(() => updateNotes(true));
-
-JwtTokenWatcher.addListener(() => updateNotes(true));
-
-export function addNote(note: Note) {
-  notesWatcher.value.push(note);
-  notesWatcher.triggerListeners();
-}
+AuthenticatedWatcher.addListener((v) => {
+  if (v === AuthenticationState.Authorized) updateNotes();
+});
 
 export function useNotes() {
   updateNotes();
 
-  return { state: useWatcherState(notesWatcher)[0], isLoading, isRevalidating };
+  return {
+    state: useWatcherState(notesWatcher)[0] ?? [],
+    isLoading: notesWatcher.value === null || isLoading,
+    isRevalidating,
+  };
 }

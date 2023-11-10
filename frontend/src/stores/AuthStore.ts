@@ -1,10 +1,13 @@
 import { Watcher } from "wal.js";
-import { isTokenExpired } from "../utils/JWT";
 
-export const JwtTokenWatcher = new Watcher(document.cookie);
-JwtTokenWatcher.addListener((v) => {
-  document.cookie = v;
-});
+export const JwtTokenWatcher = new Watcher("");
 
-export const AuthenticatedWatcher = new Watcher(true);
-if (isTokenExpired(JwtTokenWatcher.value)) AuthenticatedWatcher.value = false;
+export enum AuthenticationState {
+  Unauthorized,
+  Authorizing,
+  Authorized,
+}
+
+export const AuthenticatedWatcher = new Watcher<AuthenticationState>(
+  AuthenticationState.Authorizing
+);

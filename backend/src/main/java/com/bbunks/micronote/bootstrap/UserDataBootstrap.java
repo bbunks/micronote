@@ -18,7 +18,7 @@ public class UserDataBootstrap implements CommandLineRunner {
             brenden.setFirstName("Brenden");
             brenden.setLastName("Bunker");
             brenden.setEmail("brendenbunker@gmail.com");
-            brenden.setPassword("{bcrypt}$2y$06$LrRvvzRloxheI95p5TyOTeig1WvixHt/smvHcrzAn6OuaYkX25eh.");
+            brenden.setPassword("$2y$10$rpldcsKqDy3SFoJOISKbr.Z9dBw/KBDIi0r.4bR71DQytiLtjkj8q");
             userService.save(brenden);
         }
     }

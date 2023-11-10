@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { resetHeader, showProfile } from "../../../stores/HeaderSettingsStore";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { JwtTokenWatcher } from "../../../stores/AuthStore";
-import { useWatcherState } from "react-state-extended";
 import AuthService from "../../../services/AuthService";
 import { Card } from "../../../components/input/Card";
 
@@ -13,14 +11,12 @@ export function LogoutPage() {
   }, []);
   const navigate = useNavigate({ from: "/logout" });
 
-  const [jwtToken] = useWatcherState(JwtTokenWatcher);
-
   useEffect(() => {
     setTimeout(() => {
       AuthService.logout();
       navigate({ to: "/login" });
     }, 2000);
-  }, [jwtToken, navigate]);
+  }, [navigate]);
 
   return (
     <div className="flex flex-col justify-center items-center">

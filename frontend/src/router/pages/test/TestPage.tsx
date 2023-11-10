@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../../../components/input/Button";
 import { TextInput } from "../../../components/input/TextInput";
 import AuthService from "../../../services/AuthService";
 import { decodeJWT } from "../../../utils/JWT";
-import { JwtTokenWatcher } from "../../../stores/AuthStore";
 
 export function TestPage() {
   const [jwtState, setJwtState] = useState("");
@@ -36,12 +35,9 @@ export function TestPage() {
       />
       <Button
         onClick={() => {
-          AuthService.generateToken(
-            "brendenbunker@gmail.com",
-            "test123",
+          AuthService.login("brendenbunker@gmail.com", "test123").then(
             (token) => {
               console.log(token);
-              JwtTokenWatcher.value = token;
             }
           );
         }}
@@ -50,23 +46,27 @@ export function TestPage() {
       </Button>
       <Button
         onClick={() => {
-          AuthService.generateToken(
-            "brenden@bbunks.com",
-            "test123",
-            (token) => {
-              console.log(token);
-              JwtTokenWatcher.value = token;
-            }
-          );
+          AuthService.login("brenden@bbunks.com", "test123").then((token) => {
+            console.log(token);
+          });
         }}
       >
         bbunks
       </Button>
       <Button
         onClick={() => {
-          AuthService.makeAuthorizedRequest(reqURL)
-            .then((res) => res.json())
-            .then((res) => console.log(res));
+          AuthService.refreshToken().then((token) => {
+            console.log(token);
+          });
+        }}
+      >
+        Refresh Token
+      </Button>
+      <Button
+        onClick={() => {
+          AuthService.makeAuthorizedRequest(reqURL).then((res) =>
+            console.log(res)
+          );
         }}
       >
         Make Request
