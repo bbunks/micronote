@@ -11,13 +11,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 public class RestDataConfig implements RepositoryRestConfigurer {
-
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        // config.exposeIdsFor(NoteContent.class);
-        // config.exposeIdsFor(Note.class);
-        config.exposeIdsFor(Tag.class);
-        config.exposeIdsFor(User.class);
         config.setDefaultPageSize(Integer.MAX_VALUE);
         config.setMaxPageSize(Integer.MAX_VALUE);
     }

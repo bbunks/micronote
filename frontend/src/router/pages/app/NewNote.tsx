@@ -3,7 +3,13 @@ import { TextInput } from "../../../components/input/TextInput";
 import { TagMultiSelect } from "../../../components/input/TagMultiSelect";
 import { Button } from "../../../components/input/Button";
 import { Modal } from "../../../components/hoc/Modal";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { Note } from "../../../types/Note";
+import { arrayIfTrue } from "../../../utils/Array";
+import { Content, ContentType } from "../../../types/Content";
+import AuthService from "../../../services/AuthService";
+import { updateNotes } from "../../../stores/NoteStore";
+import { DevTool } from "@hookform/devtools";
 
 interface Props {
   closeModal: () => void;
@@ -19,10 +25,40 @@ export function NewNote({ closeModal }: Props) {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+    control,
+    // watch,
+    // formState: { errors },
+  } = useForm<Inputs>({
+    mode: "onChange",
+  });
+
+  function onSubmit(data: Inputs) {
+    const newNote: Partial<Note> = {
+      title: data.title,
+      contents: [
+        ...arrayIfTrue<Content>(
+          {
+            type: ContentType.TEXT,
+            value: data.content,
+          },
+          data.content.length > 0
+        ),
+      ],
+      tags: [],
+    };
+
+    AuthService.makeAuthorizedRequest("/api/note", {
+      body: JSON.stringify(newNote),
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => {
+      if (res.ok) {
+        updateNotes(true);
+        closeModal();
+      }
+    });
+  }
 
   function confirmClose(e?: MouseEvent<HTMLButtonElement>) {
     e?.preventDefault();
@@ -31,6 +67,7 @@ export function NewNote({ closeModal }: Props) {
 
   return (
     <>
+      <DevTool control={control} />
       <Modal onBgClick={confirmClose}>
         <h1 className="text-xl">Add a note</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>

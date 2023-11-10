@@ -1,5 +1,6 @@
 package com.bbunks.micronote.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -32,10 +33,12 @@ public class User implements UserDetails {
     private List<Tag> tags;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Note> notes;
 
     @OneToMany(mappedBy = "user")
-    private List<NoteContent> attachments;
+    @JsonIgnore
+    private List<NoteContent> noteContents;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

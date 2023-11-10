@@ -25,7 +25,7 @@ public class Note {
     @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "note")
+    @OneToMany(mappedBy = "note", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<NoteContent> contents;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -42,4 +42,11 @@ public class Note {
     @LastModifiedDate
 
     private Date lastUpdate;
+
+    public void setUser(User user) {
+        for (NoteContent nc: contents) {
+            nc.setUser(user);
+        }
+        this.user = user;
+    }
 }

@@ -1,4 +1,4 @@
-import { JwtTokenWatcher } from "../stores/AuthStore";
+import { AuthenticatedWatcher, JwtTokenWatcher } from "../stores/AuthStore";
 
 function generateToken(
   username: string,
@@ -17,6 +17,7 @@ function generateToken(
     }),
   })
     .then((res) => {
+      AuthenticatedWatcher.value = true;
       return res.text();
     })
     .then(cb);
@@ -32,6 +33,9 @@ function makeAuthorizedRequest(uri: string, options?: RequestInit) {
   return fetch(uri, {
     headers: outHeaders,
     ...rest,
+  }).then((res) => {
+    if (res.status === 401) AuthenticatedWatcher.value = false;
+    return res;
   });
 }
 

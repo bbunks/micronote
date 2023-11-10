@@ -1,0 +1,5 @@
+{
+	"devDependencies": {
+		"@hookform/devtools": "^4.3.1"
+	}
+}

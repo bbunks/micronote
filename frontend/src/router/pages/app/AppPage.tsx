@@ -1,8 +1,8 @@
-import { useNotes } from "../../../stores/NoteStore";
+import { notesWatcher, useNotes } from "../../../stores/NoteStore";
 import { LoadingIndicator } from "../../../components/Loading";
 import { NoteCard } from "./NoteCard";
 import { Masonry } from "masonic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   resetHeader,
   setCentralElement,
@@ -19,9 +19,11 @@ interface Props {
 export function AppPage({ columnWidth = 360 }: Props) {
   const { state: notes, isLoading } = useNotes();
   const [modalOpen, setModalOpen] = useState(false);
+  const iter = useRef(0);
 
   // Implement Search bar into header
   useEffect(() => {
+    notesWatcher.addRule(() => iter.current++);
     setCentralElement(<Search />);
     return resetHeader;
   }, []);
@@ -43,6 +45,7 @@ export function AppPage({ columnWidth = 360 }: Props) {
       <div className="px-4">
         <div className="">
           <Masonry
+            key={iter.current}
             items={notes.map((ele) => ({ note: ele }))}
             columnGutter={16}
             columnWidth={columnWidth}

@@ -20,7 +20,6 @@ queryWatcher.addListener((v) => {
   if (qs.length > 0) {
     qs = "?" + qs;
   }
-  console.log(qs);
   let newurl =
     window.location.protocol +
     "//" +
@@ -28,25 +27,23 @@ queryWatcher.addListener((v) => {
     window.location.pathname +
     qs;
   window.history.pushState({ path: newurl }, "", newurl);
-  console.log("Updating URL to: " + newurl);
 });
 
 let nextUpdateTime: Date;
 
-export function updateNotes(jwt: string, force?: boolean) {
+export function updateNotes(force?: boolean) {
   if (
     nextUpdateTime === undefined ||
     nextUpdateTime.getTime() < Date.now() ||
     force
   ) {
-    console.log("H");
     const s = new Date();
     s.setMinutes(s.getMinutes() + 1);
     nextUpdateTime = s;
     isRevalidating = true;
     if (force) isLoading = true;
 
-    if (!isTokenExpired(jwt)) {
+    if (!isTokenExpired(JwtTokenWatcher.value)) {
       AuthService.makeAuthorizedRequest("/api/note")
         .then((res) => res.json())
         .then((json) => {
@@ -59,9 +56,9 @@ export function updateNotes(jwt: string, force?: boolean) {
   // TODO: fetch data from an api
 }
 
-queryWatcher.addListener(() => updateNotes(JwtTokenWatcher.value, true));
+queryWatcher.addListener(() => updateNotes(true));
 
-JwtTokenWatcher.addListener((v) => updateNotes(v, true));
+JwtTokenWatcher.addListener(() => updateNotes(true));
 
 export function addNote(note: Note) {
   notesWatcher.value.push(note);
@@ -69,7 +66,7 @@ export function addNote(note: Note) {
 }
 
 export function useNotes() {
-  updateNotes(JwtTokenWatcher.value);
+  updateNotes();
 
   return { state: useWatcherState(notesWatcher)[0], isLoading, isRevalidating };
 }
