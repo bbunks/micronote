@@ -9,7 +9,7 @@ let isLoading = false;
 let isRevalidating = false;
 let controller = new AbortController();
 
-function updateTags(force?: boolean) {
+export function updateTags(force?: boolean) {
   if (
     nextUpdateTime === undefined ||
     nextUpdateTime.getTime() < Date.now() ||

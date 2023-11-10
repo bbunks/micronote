@@ -7,6 +7,9 @@ interface Props {
   error?: string | undefined;
 }
 
+const BaseClassNames =
+  "text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5 ";
+
 export const TextInput = forwardRef<
   HTMLInputElement & HTMLTextAreaElement,
   PropsWithChildren<
@@ -35,10 +38,7 @@ export const TextInput = forwardRef<
               {...props}
               id={name}
               name={name}
-              className={
-                "text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5 " +
-                inputClassName
-              }
+              className={BaseClassNames + inputClassName}
             />
           ) : (
             <textarea
@@ -47,10 +47,7 @@ export const TextInput = forwardRef<
               id={name}
               name={name}
               rows={lineCount}
-              className={
-                "text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5 resize-none " +
-                inputClassName
-              }
+              className={BaseClassNames + inputClassName}
             />
           )}
         </div>

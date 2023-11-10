@@ -35,9 +35,8 @@ public class Note {
             name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
-
     )
-    @Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @Cascade(value = org.hibernate.annotations.CascadeType.PERSIST)
     private Set<Tag> tags;
 
     @CreatedDate

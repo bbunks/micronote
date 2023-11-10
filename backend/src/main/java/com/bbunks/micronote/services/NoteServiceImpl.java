@@ -7,6 +7,7 @@ import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.Tag;
 import com.bbunks.micronote.entities.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
@@ -93,12 +94,19 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
+    @Transactional
     public void deleteNoteById(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
             Note note = noteRepository.findById(id).orElseThrow();
+
+            for (Tag tag: note.getTags()) {
+                Long count = tag.getNotes().stream().count();
+                System.out.println(tag.getId());
+                if (count == 1) tagRepository.delete(tag);
+            }
 
             if(Objects.equals(user.getId(), note.getUser().getId()))
                 noteRepository.deleteById(id);

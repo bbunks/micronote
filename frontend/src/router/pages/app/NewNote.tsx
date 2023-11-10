@@ -11,6 +11,7 @@ import AuthService from "../../../services/AuthService";
 import { updateNotes } from "../../../stores/NoteStore";
 import { DevTool } from "@hookform/devtools";
 import { Tag } from "../../../types/Tag";
+import { updateTags } from "../../../stores/TagsStore";
 
 interface Props {
   closeModal: () => void;
@@ -59,6 +60,7 @@ export function NewNote({ closeModal }: Props) {
     }).then((res) => {
       if (res.ok) {
         updateNotes(true);
+        updateTags(true);
         closeModal();
       }
     });
