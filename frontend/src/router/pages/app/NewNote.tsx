@@ -29,7 +29,7 @@ export function NewNote({ closeModal }: Props) {
     handleSubmit,
     control,
     // watch,
-    // formState: { errors },
+    formState: { errors },
   } = useForm<Inputs>({
     mode: "onChange",
   });
@@ -75,7 +75,11 @@ export function NewNote({ closeModal }: Props) {
       <Modal onBgClick={confirmClose}>
         <h1 className="text-xl">Add a note</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-          <TextInput inputLabel="Title" {...register("title")} />
+          <TextInput
+            inputLabel="Title"
+            error={errors.title?.type}
+            {...register("title", { required: true })}
+          />
           <TextInput
             inputLabel="Content"
             lineCount={2}
@@ -100,6 +104,7 @@ export function NewNote({ closeModal }: Props) {
             </Button>
             <Button>Add</Button>
           </div>
+          <p>{errors.root?.message}</p>
         </form>
       </Modal>
       {confirmationOpen && (

@@ -17,7 +17,6 @@ export interface SearchOption {
 }
 
 export function toSearchString(input: SearchObject[]) {
-  console.log(input);
   return qs.stringify(input);
 }
 

@@ -18,7 +18,7 @@ export const TagMultiSelect = ({
   value,
   name,
 }: SelectProps) => {
-  const tags = useTags();
+  const { state } = useTags();
 
   return (
     <div className="border-b-2 border-b-neutral-900 flex flex-col gap-[4px]">
@@ -29,7 +29,7 @@ export const TagMultiSelect = ({
         isMulti
         placeholder="Search"
         name={name}
-        options={tags}
+        options={state}
         unstyled
         menuPosition="fixed"
         classNames={{

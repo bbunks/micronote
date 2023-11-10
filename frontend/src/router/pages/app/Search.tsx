@@ -21,12 +21,14 @@ type Option = {
 export function Search() {
   const [query] = useWatcherState(queryWatcher);
   const [inputString, setInputString] = useState("");
-  const tags = useTags();
+  const { state, isLoading } = useTags();
+
+  if (isLoading) return <></>;
 
   const options: Option[] = [
     {
       label: "Tags",
-      options: tags.map((ele) => ({
+      options: state.map((ele) => ({
         type: "tag",
         label: ele.label,
         value: ele.id,
@@ -35,10 +37,10 @@ export function Search() {
     },
     {
       label: "Content Type",
-      options: ["Picture"].map((ele) => ({
+      options: ["Picture", "Text"].map((ele) => ({
         type: "content",
         label: ele,
-        value: ele.toLowerCase(),
+        value: ele.toUpperCase(),
       })),
     },
     ...arrayIfTrue<Option>(
@@ -67,7 +69,7 @@ export function Search() {
           isMulti
           placeholder="Search"
           options={options}
-          defaultValue={mapSearchObjects(query, tags)}
+          defaultValue={mapSearchObjects(query, state)}
           onChange={(v) => {
             queryWatcher.value = v.map(mapToSearchObject) as SearchObject[];
           }}

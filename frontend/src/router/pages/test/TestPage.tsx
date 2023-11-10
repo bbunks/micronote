@@ -64,9 +64,12 @@ export function TestPage() {
       </Button>
       <Button
         onClick={() => {
-          AuthService.makeAuthorizedRequest(reqURL).then((res) =>
-            console.log(res)
-          );
+          AuthService.makeAuthorizedRequest(reqURL)
+            .then((res) => {
+              console.log(res);
+              return res.json();
+            })
+            .then((json) => console.log(json));
         }}
       >
         Make Request
