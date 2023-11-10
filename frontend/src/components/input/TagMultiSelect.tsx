@@ -1,27 +1,35 @@
-import Select from "react-select";
-import { SelectTagChip } from "./TagChip";
+import Select, { ActionMeta, MultiValue, PropsValue } from "react-select";
+import { SelectTagChip, TagProp } from "./TagChip";
 import { useTags } from "../../stores/TagsStore";
 
-interface Props {
-  inputLabel?: string;
+interface SelectProps {
   className?: string;
+  onChange: (
+    newValue: MultiValue<TagProp>,
+    actionMeta: ActionMeta<TagProp>
+  ) => void;
+  value: PropsValue<TagProp>;
+  name: string;
 }
 
-export function TagMultiSelect({ inputLabel, className }: Props) {
+export const TagMultiSelect = ({
+  className,
+  onChange,
+  value,
+  name,
+}: SelectProps) => {
   const tags = useTags();
 
   return (
     <div className="border-b-2 border-b-neutral-900 flex flex-col gap-[4px]">
-      {inputLabel && <p className="text-neutral-900">{inputLabel}</p>}
+      <p className="text-neutral-900">Tags</p>
       <Select
+        value={value}
+        onChange={onChange}
         isMulti
         placeholder="Search"
-        name={inputLabel}
-        options={tags.map((ele) => ({
-          label: ele.label,
-          value: ele.id,
-          color: ele.color,
-        }))}
+        name={name}
+        options={tags}
         unstyled
         menuPosition="fixed"
         classNames={{
@@ -48,4 +56,4 @@ export function TagMultiSelect({ inputLabel, className }: Props) {
       />
     </div>
   );
-}
+};

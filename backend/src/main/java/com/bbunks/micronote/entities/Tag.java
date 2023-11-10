@@ -16,6 +16,7 @@ public class Tag {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToMany(mappedBy = "tags")

@@ -12,8 +12,8 @@ function updateTags() {
     nextUpdateTime = s;
 
     tagsWatcher.value = [
-      { label: "Idea", id: 1, color: "var(--primary)" },
-      { label: "Picture", id: 2, color: "var(--secondary)" },
+      { label: "Picture", id: 1, color: "var(--secondary)" },
+      { label: "Idea", id: 2, color: "var(--primary)" },
     ];
   }
   // TODO: fetch data from an api

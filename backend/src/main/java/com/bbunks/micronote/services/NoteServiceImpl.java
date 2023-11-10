@@ -1,9 +1,11 @@
 package com.bbunks.micronote.services;
 
 import com.bbunks.micronote.dao.NoteRepository;
+import com.bbunks.micronote.dao.TagRepository;
 import com.bbunks.micronote.dao.UserRepository;
 import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.NoteContent;
+import com.bbunks.micronote.entities.Tag;
 import com.bbunks.micronote.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,9 @@ public class NoteServiceImpl implements NoteService{
 
     @Autowired
     NoteRepository noteRepository;
+
+    @Autowired
+    TagRepository tagRepository;
 
     @Override
     public List<Note> getNotes() {
@@ -46,8 +51,45 @@ public class NoteServiceImpl implements NoteService{
             for (NoteContent nc: note.getContents()) {
                 nc.setNote(note);
             }
-            noteRepository.save(note);
+
+            for (Tag tag: note.getTags()) {
+                if (tag.getId() == null) {
+                    // If the tag doesn't have an ID, create a new tag
+                    Tag newTag = new Tag();
+                    newTag.setLabel(tag.getLabel());
+                    newTag.setColor(tag.getColor());
+                    newTag.setUser(user);
+
+                    // Save the newly created tag to the repository
+                    newTag = tagRepository.save(newTag);
+
+                    note.getTags().remove(tag);
+                    note.getTags().add(newTag);
+                } else {
+                    Tag existingTag = tagRepository.findById(tag.getId()).orElse(null);
+
+                    if (existingTag != null) {
+                        // Associate 'existingTag' with your 'note'
+                        note.getTags().remove(tag);
+                        note.getTags().add(existingTag);
+                    } else {
+                        // If the tag doesn't have an ID, create a new tag
+                        Tag newTag = new Tag();
+                        newTag.setLabel(tag.getLabel());
+                        newTag.setColor(tag.getColor());
+                        newTag.setUser(user);
+
+                        // Save the newly created tag to the repository
+                        newTag = tagRepository.save(newTag);
+
+                        note.getTags().remove(tag);
+                        note.getTags().add(newTag);
+                    }
+                }
+            }
+
         }
+        noteRepository.save(note);
     }
 
     @Override

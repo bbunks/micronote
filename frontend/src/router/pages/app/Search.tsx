@@ -34,9 +34,9 @@ export function Search() {
       })),
     },
     {
-      label: "Attachment Type",
+      label: "Content Type",
       options: ["Picture"].map((ele) => ({
-        type: "attachment",
+        type: "content",
         label: ele,
         value: ele.toLowerCase(),
       })),
@@ -115,8 +115,8 @@ function SelectTagChip({
           <p className="text-neutral-800 text-xs">tag: </p>
         </>
       )}
-      {props.data.type == "attachment" && (
-        <p className="pl-1 text-neutral-800 text-xs">attachment: </p>
+      {props.data.type == "content" && (
+        <p className="pl-1 text-neutral-800 text-xs">content: </p>
       )}
       {props.data.type == "contains" && (
         <p className="pl-1 text-neutral-800 text-xs">contains: </p>

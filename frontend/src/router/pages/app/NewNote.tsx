@@ -3,13 +3,14 @@ import { TextInput } from "../../../components/input/TextInput";
 import { TagMultiSelect } from "../../../components/input/TagMultiSelect";
 import { Button } from "../../../components/input/Button";
 import { Modal } from "../../../components/hoc/Modal";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Note } from "../../../types/Note";
 import { arrayIfTrue } from "../../../utils/Array";
 import { Content, ContentType } from "../../../types/Content";
 import AuthService from "../../../services/AuthService";
 import { updateNotes } from "../../../stores/NoteStore";
 import { DevTool } from "@hookform/devtools";
+import { Tag } from "../../../types/Tag";
 
 interface Props {
   closeModal: () => void;
@@ -18,6 +19,7 @@ interface Props {
 interface Inputs {
   title: string;
   content: string;
+  tags: Tag[];
 }
 
 export function NewNote({ closeModal }: Props) {
@@ -44,8 +46,10 @@ export function NewNote({ closeModal }: Props) {
           data.content.length > 0
         ),
       ],
-      tags: [],
+      tags: data.tags,
     };
+
+    console.log(newNote);
 
     AuthService.makeAuthorizedRequest("/api/note", {
       body: JSON.stringify(newNote),
@@ -77,7 +81,19 @@ export function NewNote({ closeModal }: Props) {
             lineCount={2}
             {...register("content")}
           />
-          <TagMultiSelect inputLabel="Tags" />
+          <Controller
+            control={control}
+            defaultValue={[]}
+            name="tags"
+            render={({ field }) => (
+              <TagMultiSelect
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
+          />
+
           <div className="flex justify-end gap-2">
             <Button variant="Neutral" onClick={confirmClose}>
               Cancel

@@ -2,7 +2,7 @@ import { Tag } from "../types/Tag";
 import { AttachmentType, findAttachmentTypeById } from "./Attachments";
 import qs from "qs";
 
-type SearchItemType = "attachment" | "tag" | "contains";
+type SearchItemType = "content" | "tag" | "contains";
 
 export interface SearchObject {
   type: SearchItemType;
@@ -42,11 +42,11 @@ export function mapFromSearchObject(
   let tag: Tag | null;
   let attachment: AttachmentType | null;
   switch (searchObject.type) {
-    case "attachment":
+    case "content":
       attachment = findAttachmentTypeById(searchObject.value) ?? null;
       if (!attachment) return null;
       return {
-        type: "attachment",
+        type: "content",
         label: attachment?.label,
         value: searchObject.value,
       };

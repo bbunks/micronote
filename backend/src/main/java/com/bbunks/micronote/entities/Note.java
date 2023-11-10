@@ -3,12 +3,14 @@ package com.bbunks.micronote.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -33,8 +35,10 @@ public class Note {
             name = "note_tag",
             joinColumns = @JoinColumn(name = "note_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
+
     )
-    private List<Tag> tags;
+    @Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    private Set<Tag> tags;
 
     @CreatedDate
     private Date createdDate;

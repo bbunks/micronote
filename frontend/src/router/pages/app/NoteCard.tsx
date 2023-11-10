@@ -51,7 +51,7 @@ export function NoteCard({ data: { note } }: Props) {
         <div className="flex items-center gap-2 absolute right-0">
           <Button
             variant="PrimaryInverse"
-            className="hidden group-hover:flex"
+            className="hidden group-hover:flex !p-3"
             onClick={deleteNote}
           >
             <FontAwesomeIcon icon={faTrash} />
