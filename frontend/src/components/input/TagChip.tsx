@@ -4,6 +4,7 @@ export interface TagProp {
   color?: string;
   id?: number;
   label?: string;
+  new?: boolean;
 }
 
 export function SelectTagChip(props: MultiValueGenericProps<TagProp>) {

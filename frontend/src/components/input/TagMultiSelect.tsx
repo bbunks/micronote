@@ -1,6 +1,15 @@
-import Select, { ActionMeta, MultiValue, PropsValue } from "react-select";
+import {
+  ActionMeta,
+  MultiValue,
+  OptionProps,
+  PropsValue,
+  components,
+} from "react-select";
 import { SelectTagChip, TagProp } from "./TagChip";
 import { useTags } from "../../stores/TagsStore";
+import { arrayIfTrue } from "../../utils/Array";
+import { useState } from "react";
+import { MultiSelect } from "./MultiSelect";
 
 interface SelectProps {
   className?: string;
@@ -12,48 +21,66 @@ interface SelectProps {
   name: string;
 }
 
-export const TagMultiSelect = ({
-  className,
-  onChange,
-  value,
-  name,
-}: SelectProps) => {
+export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
   const { state } = useTags();
+  const [inputString, setInputString] = useState("");
+
+  console.log(inputString);
+
+  const options = [
+    ...state,
+    ...arrayIfTrue(
+      {
+        label: inputString,
+        value: inputString.toLowerCase(),
+        new: true,
+      },
+      inputString.length > 0
+    ),
+  ];
+
+  function handleChange(
+    newValue: MultiValue<TagProp>,
+    actionMeta: ActionMeta<TagProp>
+  ) {
+    onChange(newValue, actionMeta);
+  }
 
   return (
-    <div className="border-b-2 border-b-neutral-900 flex flex-col gap-[4px]">
-      <p className="text-neutral-900">Tags</p>
-      <Select
-        value={value}
-        onChange={onChange}
-        isMulti
-        placeholder="Search"
-        name={name}
-        options={state}
-        unstyled
-        menuPosition="fixed"
-        classNames={{
-          container: (state) =>
-            "text-neutral-900 outline-none " +
-            (state.isFocused
-              ? "bg-gray-500 bg-opacity-5"
-              : "hover:bg-gray-500 hover:bg-opacity-10 ") +
-            " " +
-            className,
-          valueContainer: () => "gap-1",
-          clearIndicator: () =>
-            "hover:bg-gray-500 hover:bg-opacity-20 rounded-full mr-1 text-neutral-800",
-          indicatorsContainer: () => "text-neutral-800",
-          control: (state) =>
-            "!min-h-0 py-2 p-transition " + (state.isFocused ? "pl-2" : ""),
-          menu: () => "bg-neutral-100",
-          option: () => "hover:bg-gray-500 hover:bg-opacity-10 p-3",
-          placeholder: () => "text-neutral-500",
-        }}
-        components={{
-          MultiValueContainer: SelectTagChip,
-        }}
-      />
-    </div>
+    <MultiSelect
+      value={value}
+      onChange={handleChange}
+      placeholder="Search"
+      label="Tags"
+      name={name}
+      options={options}
+      components={{
+        MultiValueContainer: SelectTagChip,
+        Option: Option,
+      }}
+      onInputChange={setInputString}
+    />
   );
 };
+
+function Option(props: OptionProps<TagProp>) {
+  return (
+    <components.Option {...props}>
+      <div className="flex items-center gap-2">
+        {props.data.new ? (
+          <p>Create tag "{props.children}"</p>
+        ) : (
+          <>
+            <div
+              className="h-4 w-4 rounded-full"
+              style={{
+                backgroundColor: props.data.color,
+              }}
+            />
+            {props.children}
+          </>
+        )}
+      </div>
+    </components.Option>
+  );
+}

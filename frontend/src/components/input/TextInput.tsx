@@ -24,7 +24,7 @@ export const TextInput = forwardRef<
       <div className="flex flex-col gap-1">
         <div
           className={
-            "border-b-2 border-b-neutral-900 flex flex-col gap-[1 " + className
+            "border-b-2 border-b-neutral-900 flex flex-col gap-1 " + className
           }
         >
           {inputLabel && (
@@ -47,7 +47,7 @@ export const TextInput = forwardRef<
               id={name}
               name={name}
               rows={lineCount}
-              className={BaseClassNames + inputClassName}
+              className={BaseClassNames + "resize-none " + inputClassName}
             />
           )}
         </div>
