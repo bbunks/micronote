@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import AuthService from "../../../services/AuthService";
 import { updateNotes } from "../../../stores/NoteStore";
+import { updateTags } from "../../../stores/TagsStore";
 
 interface Props {
   data: {
@@ -25,7 +26,10 @@ export function NoteCard({ data: { note } }: Props) {
     AuthService.makeAuthorizedRequest("/api/note/" + note.id, {
       method: "DELETE",
     }).then((res) => {
-      if (res.ok) updateNotes(true);
+      if (res.ok) {
+        updateNotes(true);
+        updateTags(true);
+      }
     });
   }
 

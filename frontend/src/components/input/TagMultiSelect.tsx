@@ -35,7 +35,10 @@ export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
         value: inputString.toLowerCase(),
         new: true,
       },
-      inputString.length > 0
+      inputString.length > 0 &&
+        !state
+          .map((ele) => ele.label.toLowerCase())
+          .includes(inputString.toLowerCase())
     ),
   ];
 
@@ -52,6 +55,7 @@ export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
       onChange={handleChange}
       placeholder="Search"
       label="Tags"
+      menuPosition="fixed"
       name={name}
       options={options}
       components={{
