@@ -18,10 +18,12 @@ export function LoginPage() {
   }, []);
   const navigate = useNavigate({ from: "/login" });
 
+  const [error, setError] = useState();
+
   const [authenticated] = useWatcherState(AuthenticatedWatcher);
 
   useEffect(() => {
-    if (authenticated === AuthenticationState.Unauthorized) {
+    if (authenticated === AuthenticationState.Authorized) {
       navigate({ to: "/app" });
     }
   }, [authenticated, navigate]);
@@ -47,9 +49,15 @@ export function LoginPage() {
             setPassword(e.target.value);
           }}
         />
+        {error && <p className="text-error text-sm">{error}</p>}
         <Button
           onClick={() => {
-            AuthService.login(username, password);
+            setError(undefined);
+            AuthService.login(username, password)
+              .then(() => navigate({ to: "/app" }))
+              .catch((err) => {
+                setError(err);
+              });
           }}
         >
           Login

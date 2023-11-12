@@ -18,12 +18,16 @@ async function login(username: string, password: string) {
     }),
   });
 
-  const token = await res.text();
+  if (res.ok) {
+    const token = await res.text();
 
-  AuthenticatedWatcher.value = AuthenticationState.Authorized;
-  JwtTokenWatcher.value = token;
+    AuthenticatedWatcher.value = AuthenticationState.Authorized;
+    JwtTokenWatcher.value = token;
 
-  return token;
+    return token;
+  } else {
+    throw "Invalid username or password";
+  }
 }
 
 async function refreshToken() {
@@ -71,9 +75,12 @@ async function makeAuthorizedRequest(uri: string, options?: RequestInit) {
 }
 
 function logout() {
-  AuthenticatedWatcher.value = AuthenticationState.Unauthorized;
-  JwtTokenWatcher.value = "";
-  fetch("/auth/logout");
+  return fetch("/auth/logout").then((res) => {
+    if (res.ok) {
+      JwtTokenWatcher.value = "";
+      AuthenticatedWatcher.value = AuthenticationState.Unauthorized;
+    }
+  });
 }
 
 const AuthService = {

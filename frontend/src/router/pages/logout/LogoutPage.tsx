@@ -12,10 +12,10 @@ export function LogoutPage() {
   const navigate = useNavigate({ from: "/logout" });
 
   useEffect(() => {
-    setTimeout(() => {
-      AuthService.logout();
+    AuthService.logout().then(() => {
       navigate({ to: "/login" });
-    }, 2000);
+      location.reload();
+    });
   }, [navigate]);
 
   return (
