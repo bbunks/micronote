@@ -11,8 +11,8 @@ let controller = new AbortController();
 
 export function updateTags(force?: boolean) {
   if (
-    nextUpdateTime === undefined ||
-    nextUpdateTime.getTime() < Date.now() ||
+    ((nextUpdateTime === undefined || nextUpdateTime.getTime() < Date.now()) &&
+      !isRevalidating) ||
     force
   ) {
     // TODO: fetch data from an api

@@ -33,8 +33,8 @@ let controller = new AbortController();
 
 export function updateNotes(force?: boolean) {
   if (
-    nextUpdateTime === undefined ||
-    nextUpdateTime.getTime() < Date.now() ||
+    ((nextUpdateTime === undefined || nextUpdateTime.getTime() < Date.now()) &&
+      !isRevalidating) ||
     force
   ) {
     if (isLoading && force) controller.abort();
@@ -48,6 +48,7 @@ export function updateNotes(force?: boolean) {
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log("Updating Notes");
         notesWatcher.value = json;
         isLoading = false;
         isRevalidating = false;

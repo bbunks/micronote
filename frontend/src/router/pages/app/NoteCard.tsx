@@ -40,7 +40,7 @@ export function NoteCard({ data: { note } }: Props) {
         <p className="text-neutral-600 text-sm group-hover:opacity-0">
           {DateToString(note.createdDate)}
         </p>
-        <div className="flex items-center gap-2 absolute right-0">
+        <div className="flex items-center gap-2 absolute -right-1">
           <Button
             variant="PrimaryInverse"
             className="hidden group-hover:flex !p-3"

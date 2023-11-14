@@ -1,5 +1,5 @@
 import { Router, Route, RootRoute } from "@tanstack/react-router";
-import { RootLayout } from "./RootLayout.";
+import { RootLayout } from "./RootLayout";
 import { LandingPage } from "./pages/landing/LandingPage";
 import { LoginPage } from "./pages/login/LoginPage";
 import { AppPage } from "./pages/app/AppPage";
@@ -7,6 +7,7 @@ import QueryString from "qs";
 import { TestPage } from "./pages/test/TestPage";
 import { LogoutPage } from "./pages/logout/LogoutPage";
 import { AboutPage } from "./pages/about/AboutPage";
+import { SignupPage } from "./pages/signup/SignupPage";
 
 // Create a root route
 const rootRoute = new RootRoute({
@@ -24,6 +25,12 @@ const aboutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/about",
   component: AboutPage,
+});
+
+const signupPage = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/signup",
+  component: SignupPage,
 });
 
 const loginRoute = new Route({
@@ -58,6 +65,7 @@ const routeTree = rootRoute.addChildren([
     testRoute,
     logoutRoute,
     aboutRoute,
+    signupPage,
   ]),
 ]);
 

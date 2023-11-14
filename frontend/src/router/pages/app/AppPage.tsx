@@ -48,7 +48,7 @@ export function AppPage({ columnWidth = 360 }: Props) {
             What are you thinking? Write it down.
           </p>
         )}
-        <div className="">
+        <div className="mb-20">
           <Masonry
             key={iter.current}
             items={notes.map((ele) => ({ note: ele }))}

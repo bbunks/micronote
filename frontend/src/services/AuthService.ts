@@ -34,11 +34,13 @@ let currentRequest: Promise<string> | null = null;
 
 function refreshToken() {
   if (currentRequest === null) {
-    return (currentRequest = fetch("/auth/refreshToken", {
+    currentRequest = fetch("/auth/refreshToken", {
       method: "POST",
     })
       .then((res) => {
-        if (res.status === 401) {
+        currentRequest = null;
+
+        if (res.status === 403) {
           logout();
           throw "Unauthorized";
         }
@@ -49,13 +51,10 @@ function refreshToken() {
         AuthenticatedWatcher.value = AuthenticationState.Authorized;
         JwtTokenWatcher.value = token;
 
-        currentRequest = null;
-
         return token;
-      }));
-  } else {
-    return currentRequest;
+      });
   }
+  return currentRequest;
 }
 
 async function makeAuthorizedRequest(uri: string, options?: RequestInit) {
@@ -72,6 +71,8 @@ async function makeAuthorizedRequest(uri: string, options?: RequestInit) {
     });
   }
 
+  console.log(uri);
+
   if (
     AuthenticatedWatcher.value !== AuthenticationState.Authorized ||
     isTokenExpired(JwtTokenWatcher.value) ||
@@ -84,13 +85,12 @@ async function makeAuthorizedRequest(uri: string, options?: RequestInit) {
   }
 }
 
-function logout() {
-  return fetch("/auth/logout").then((res) => {
-    if (res.ok) {
-      JwtTokenWatcher.value = "";
-      AuthenticatedWatcher.value = AuthenticationState.Unauthorized;
-    }
-  });
+async function logout() {
+  const res = await fetch("/auth/logout");
+  if (res.ok) {
+    JwtTokenWatcher.value = "";
+    AuthenticatedWatcher.value = AuthenticationState.Unauthorized;
+  }
 }
 
 const AuthService = {
