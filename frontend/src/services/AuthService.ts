@@ -93,10 +93,44 @@ async function logout() {
   }
 }
 
+async function signup(
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string
+) {
+  const res = await fetch("/auth/createUser", {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      firstName,
+      lastName,
+      email,
+      password,
+    }),
+  });
+  console.log(res);
+
+  if (res.ok) {
+    const token = await res.text();
+
+    AuthenticatedWatcher.value = AuthenticationState.Authorized;
+    JwtTokenWatcher.value = token;
+
+    return token;
+  } else {
+    throw await res.text();
+  }
+}
+
 const AuthService = {
   makeAuthorizedRequest,
-  logout,
+  signup,
   login,
+  logout,
   refreshToken,
 };
 

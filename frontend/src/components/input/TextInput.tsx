@@ -24,14 +24,17 @@ export const TextInput = forwardRef<
       <div className="flex flex-col gap-1">
         <div
           className={
-            "border-b-2 border-b-neutral-900 flex flex-col gap-1 " + className
+            "border-b-2 border-b-neutral-900 flex flex-col " + className
           }
         >
-          {inputLabel && (
-            <label htmlFor={name} className="text-neutral-900">
-              {inputLabel}
-            </label>
-          )}
+          <div className="flex items-baseline gap-2">
+            {inputLabel && (
+              <label htmlFor={name} className="text-neutral-900">
+                {inputLabel}
+              </label>
+            )}
+            {error && <p className="text-error text-xs">{error}</p>}
+          </div>
           {(lineCount ?? 1) <= 1 ? (
             <input
               ref={ref}
@@ -51,7 +54,6 @@ export const TextInput = forwardRef<
             />
           )}
         </div>
-        {error && <p className="text-error text-xs">{error}</p>}
       </div>
     );
   }

@@ -1,17 +1,21 @@
 package com.bbunks.micronote.controllers;
 
 import com.bbunks.micronote.dto.auth.AuthRequest;
+import com.bbunks.micronote.dto.auth.UserInfo;
 import com.bbunks.micronote.entities.User;
 import com.bbunks.micronote.security.JwtService;
 
 import com.bbunks.micronote.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +29,9 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @PostMapping("/generateToken")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
@@ -48,5 +55,22 @@ public class AuthenticationController {
         } else {
             throw new UsernameNotFoundException("invalid user request!");
         }
+    }
+
+    @PostMapping("/createUser")
+    @Transactional
+    public String addNewUser(@RequestBody UserInfo userInfo, HttpServletResponse response) {
+
+        userInfo.setPassword(encoder.encode(userInfo.getPassword()));
+        try {
+            userService.addUser(userInfo);
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.CONFLICT.value());
+            return e.getMessage();
+        }
+
+        String refreshToken = jwtService.generateToken(userInfo.getEmail(), 60*24*7);
+        response.setHeader("Set-Cookie", "REFRESH_TOKEN="+refreshToken+";HttpOnly;Secure;Path=/");
+        return jwtService.generateToken(userInfo.getEmail(), 15);
     }
 }

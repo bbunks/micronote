@@ -1,5 +1,6 @@
 package com.bbunks.micronote.services;
 
+import com.bbunks.micronote.dto.auth.UserInfo;
 import com.bbunks.micronote.entities.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -13,5 +14,7 @@ public interface UserService extends UserDetailsService {
     User save(User user);
 
     Long getCount();
+
+    String addUser(UserInfo userInfo);
 
 }

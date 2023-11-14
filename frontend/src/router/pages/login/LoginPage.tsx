@@ -10,13 +10,25 @@ import {
   AuthenticationState,
 } from "../../../stores/AuthStore";
 import { useWatcherState } from "react-state-extended";
+import { useForm } from "react-hook-form";
+
+interface Inputs {
+  email: string;
+  password: string;
+}
 
 export function LoginPage() {
   useEffect(() => {
     showProfile(false);
-    return resetHeader();
+    return () => resetHeader();
   }, []);
   const navigate = useNavigate({ from: "/login" });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
   const [error, setError] = useState();
 
@@ -28,41 +40,55 @@ export function LoginPage() {
     }
   }, [authenticated, navigate]);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  function submit(data: Inputs) {
+    setError(undefined);
+    AuthService.login(data.email, data.password)
+      .then(() => navigate({ to: "/app" }))
+      .catch((err) => {
+        setError(err);
+      });
+  }
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <Card className="max-w-lg">
-        <TextInput
-          inputLabel="Username"
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-        />
-        <TextInput
-          inputLabel="Password"
-          type="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        {error && <p className="text-error text-sm">{error}</p>}
-        <Button
-          onClick={() => {
-            setError(undefined);
-            AuthService.login(username, password)
-              .then(() => navigate({ to: "/app" }))
-              .catch((err) => {
-                setError(err);
-              });
-          }}
-        >
-          Login
-        </Button>
-      </Card>
+    <div className="flex flex-col justify-center items-center gap-4">
+      <form
+        className="w-full flex justify-center"
+        onSubmit={handleSubmit(submit)}
+      >
+        <Card className="max-w-xs w-full">
+          <TextInput
+            {...register("email", {
+              required: "Required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+            inputLabel="Email"
+            error={errors.email?.message}
+          />
+          <TextInput
+            {...register("password", { required: "Required" })}
+            inputLabel="Password"
+            type="password"
+            error={errors.password?.message}
+          />
+          {error && <p className="text-error text-sm">{error}</p>}
+          <Button>Login</Button>
+        </Card>
+      </form>
+      <div className="w-full flex justify-center">
+        <Card className="max-w-xs w-full">
+          <p>Don't have an account?</p>
+          <Button
+            onClick={() => {
+              navigate({ to: "/signup" });
+            }}
+          >
+            Sign Up
+          </Button>
+        </Card>
+      </div>
     </div>
   );
 }
