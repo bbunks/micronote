@@ -7,6 +7,7 @@ import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.Tag;
 import com.bbunks.micronote.entities.User;
+import com.bbunks.micronote.enums.ContentType;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -15,9 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class NoteServiceImpl implements NoteService{
@@ -36,7 +35,10 @@ public class NoteServiceImpl implements NoteService{
 
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-            return noteRepository.findByUserId(user.getId(), Sort.by(Sort.Direction.DESC, "createdDate"));
+            List<Long> tagIds = List.of();
+            List<ContentType> contentTypes = List.of(ContentType.TEXT);
+            return noteRepository.findNotesByUserAndTagsAndContentTypes(user.getId(),tagIds, null, tagIds.size(), contentTypes.size());
+            //return noteRepository.findByUserId(user.getId(), Sort.by(Sort.Direction.DESC, "createdDate"));
         }
 
         return Collections.emptyList();
@@ -53,6 +55,8 @@ public class NoteServiceImpl implements NoteService{
                 nc.setNote(note);
             }
 
+            Set<Tag> newTags = new HashSet<>();
+
             for (Tag tag: note.getTags()) {
                 if (tag.getId() == null) {
                     // If the tag doesn't have an ID, create a new tag
@@ -64,15 +68,13 @@ public class NoteServiceImpl implements NoteService{
                     // Save the newly created tag to the repository
                     newTag = tagRepository.save(newTag);
 
-                    note.getTags().remove(tag);
-                    note.getTags().add(newTag);
+                    newTags.add(newTag);
                 } else {
-                    Tag existingTag = tagRepository.findById(tag.getId()).orElse(null);
+                    Tag existingTag = tagRepository.findByIdAndUserId(tag.getId(), user.getId()).orElse(null);
 
                     if (existingTag != null) {
                         // Associate 'existingTag' with your 'note'
-                        note.getTags().remove(tag);
-                        note.getTags().add(existingTag);
+                        newTags.add(existingTag);
                     } else {
                         // If the tag doesn't have an ID, create a new tag
                         Tag newTag = new Tag();
@@ -83,14 +85,15 @@ public class NoteServiceImpl implements NoteService{
                         // Save the newly created tag to the repository
                         newTag = tagRepository.save(newTag);
 
-                        note.getTags().remove(tag);
-                        note.getTags().add(newTag);
+                        newTags.add(newTag);
                     }
                 }
             }
 
+            note.setTags(newTags);
+            noteRepository.save(note);
+
         }
-        noteRepository.save(note);
     }
 
     @Override

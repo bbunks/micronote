@@ -2,6 +2,8 @@ package com.bbunks.micronote.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,9 +19,11 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Note {
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String title;
 
     @ManyToOne
@@ -43,7 +47,6 @@ public class Note {
     private Date createdDate;
     
     @LastModifiedDate
-
     private Date lastUpdate;
 
     public void setUser(User user) {
