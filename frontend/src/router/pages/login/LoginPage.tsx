@@ -11,6 +11,7 @@ import {
 } from "../../../stores/AuthStore";
 import { useWatcherState } from "react-state-extended";
 import { useForm } from "react-hook-form";
+import { LoadingIndicator } from "../../../components/Loading";
 
 interface Inputs {
   email: string;
@@ -43,12 +44,21 @@ export function LoginPage() {
   function submit(data: Inputs) {
     setError(undefined);
     AuthService.login(data.email, data.password)
-      .then(() => navigate({ to: "/app" }))
+      .then(() => navigate({ to: "/app", replace: true }))
       .catch((err) => {
         setError(err);
       });
   }
 
+  if (
+    authenticated === AuthenticationState.Authorizing ||
+    authenticated === AuthenticationState.Authorized
+  )
+    return (
+      <div className="flex justify-center items-center p-16">
+        <LoadingIndicator />
+      </div>
+    );
   return (
     <div className="flex flex-col justify-center items-center gap-4">
       <form

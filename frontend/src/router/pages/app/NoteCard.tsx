@@ -52,7 +52,7 @@ export function NoteCard({ data: { note } }: Props) {
       </div>
       {images && images?.length > 0 && (
         <div className="-mx-4 mb-0">
-          <img className="min-h-[100px]" src={images[0].value} />
+          <img className="min-h-[300px]" src={images[0].value} />
           {/* {images.length > 1 && (
             <div className="flex flex-row">
               {images.map((ele) => (

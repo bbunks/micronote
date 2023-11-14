@@ -11,6 +11,7 @@ import {
 } from "../../../stores/AuthStore";
 import { useWatcherState } from "react-state-extended";
 import { useForm } from "react-hook-form";
+import { LoadingIndicator } from "../../../components/Loading";
 
 interface Inputs {
   firstName: string;
@@ -50,6 +51,16 @@ export function SignupPage() {
         setError(err);
       });
   }
+
+  if (
+    authenticated === AuthenticationState.Authorizing ||
+    authenticated === AuthenticationState.Authorized
+  )
+    return (
+      <div className="flex justify-center items-center p-16">
+        <LoadingIndicator />
+      </div>
+    );
 
   return (
     <div className="flex flex-col justify-center items-center gap-4">

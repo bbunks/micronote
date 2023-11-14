@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import {
   resetHeader,
   setCentralElement,
+  showProfile,
 } from "../../../stores/HeaderSettingsStore";
 import { LandingNav } from "../../../components/LandingNav";
 import { Button } from "../../../components/input/Button";
@@ -12,6 +13,8 @@ import { Link } from "@tanstack/react-router";
 export function LandingPage() {
   useEffect(() => {
     setCentralElement(<LandingNav />);
+    showProfile(false);
+
     return resetHeader;
   }, []);
   return (

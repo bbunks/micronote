@@ -56,6 +56,7 @@ export function mapFromSearchObject(
       return {
         type: "tag",
         label: tag.label,
+        // @ts-expect-error This won't happen
         value: tag.id,
         color: tag.color,
       };

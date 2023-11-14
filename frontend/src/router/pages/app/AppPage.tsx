@@ -31,11 +31,9 @@ export function AppPage({ columnWidth = 360 }: Props) {
   //If notes state is load, return a spiner rather than the empty page
   if (isLoading) {
     return (
-      <>
-        <div className="flex justify-center items-center p-16">
-          <LoadingIndicator />
-        </div>
-      </>
+      <div className="flex justify-center items-center p-16">
+        <LoadingIndicator />
+      </div>
     );
   }
 
