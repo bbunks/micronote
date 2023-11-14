@@ -35,18 +35,6 @@ export function NoteCard({ data: { note } }: Props) {
 
   return (
     <Card className="group">
-      {images && images?.length > 0 && (
-        <div className="-m-4 mb-0">
-          <img className="min-h-[100px]" src={images[0].value} />
-          {/* {images.length > 1 && (
-            <div className="flex flex-row">
-              {images.map((ele) => (
-                <img className="h-16" src={ele.path} />
-              ))}
-            </div>
-          )} */}
-        </div>
-      )}
       <div className="flex justify-between items-center relative">
         <h3 className="text-lg text-neutral-900">{note.title}</h3>
         <p className="text-neutral-600 text-sm group-hover:opacity-0">
@@ -62,12 +50,24 @@ export function NoteCard({ data: { note } }: Props) {
           </Button>
         </div>
       </div>
+      {images && images?.length > 0 && (
+        <div className="-mx-4 mb-0">
+          <img className="min-h-[100px]" src={images[0].value} />
+          {/* {images.length > 1 && (
+            <div className="flex flex-row">
+              {images.map((ele) => (
+                <img className="h-16" src={ele.path} />
+              ))}
+            </div>
+          )} */}
+        </div>
+      )}
       {text &&
         text?.length > 0 &&
         text?.map((text, i) => (
           <div key={"note" + note.id + "text" + i}>{text.value}</div>
         ))}
-      <div>
+      <div className="flex flex-wrap gap-2">
         {note.tags.map((ele) => (
           <TagChip
             label={ele.label}

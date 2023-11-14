@@ -28,7 +28,7 @@ export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
   console.log(inputString);
 
   const options = [
-    ...state,
+    ...state.map((ele) => ({ ...ele, value: ele.id })),
     ...arrayIfTrue(
       {
         label: inputString,
