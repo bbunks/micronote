@@ -43,7 +43,7 @@ export function updateNotes(force?: boolean) {
     isRevalidating = true;
     if (force) isLoading = true;
 
-    AuthService.makeAuthorizedRequest("/api/note", {
+    AuthService.makeAuthorizedRequest("/api/note" + window.location.search, {
       signal: controller.signal,
     })
       .then((res) => res.json())

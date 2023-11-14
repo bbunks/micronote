@@ -3,14 +3,15 @@ package com.bbunks.micronote.services;
 import com.bbunks.micronote.dao.NoteRepository;
 import com.bbunks.micronote.dao.TagRepository;
 import com.bbunks.micronote.dao.UserRepository;
+import com.bbunks.micronote.dto.api.FilterRequest;
 import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.Tag;
 import com.bbunks.micronote.entities.User;
 import com.bbunks.micronote.enums.ContentType;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.filters.RequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,14 +31,18 @@ public class NoteServiceImpl implements NoteService{
     TagRepository tagRepository;
 
     @Override
-    public List<Note> getNotes() {
+    public List<Note> getNotes(FilterRequest filters) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-            List<Long> tagIds = List.of();
-            List<ContentType> contentTypes = List.of(ContentType.TEXT);
-            return noteRepository.findNotesByUserAndTagsAndContentTypes(user.getId(),tagIds, null, tagIds.size(), contentTypes.size());
+
+            List<Long> tagIds = filters.getTags();
+            int tagsLength = (tagIds != null) ? tagIds.size() : 0;
+            List<ContentType> contentTypes = filters.getContentTypes();
+            int contentsLength = (contentTypes != null) ? contentTypes.size() : 0;
+
+            return noteRepository.findNotesByUserAndTagsAndContentTypes(user.getId(), tagIds, contentTypes, tagsLength, contentsLength);
             //return noteRepository.findByUserId(user.getId(), Sort.by(Sort.Direction.DESC, "createdDate"));
         }
 

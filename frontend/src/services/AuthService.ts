@@ -30,22 +30,32 @@ async function login(username: string, password: string) {
   }
 }
 
-async function refreshToken() {
-  const res = await fetch("/auth/refreshToken", {
-    method: "POST",
-  });
+let currentRequest: Promise<string> | null = null;
 
-  if (res.status === 401) {
-    logout();
-    throw "Unauthorized";
+function refreshToken() {
+  if (currentRequest === null) {
+    return (currentRequest = fetch("/auth/refreshToken", {
+      method: "POST",
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          logout();
+          throw "Unauthorized";
+        }
+
+        return res.text();
+      })
+      .then((token) => {
+        AuthenticatedWatcher.value = AuthenticationState.Authorized;
+        JwtTokenWatcher.value = token;
+
+        currentRequest = null;
+
+        return token;
+      }));
+  } else {
+    return currentRequest;
   }
-
-  const token = await res.text();
-
-  AuthenticatedWatcher.value = AuthenticationState.Authorized;
-  JwtTokenWatcher.value = token;
-
-  return token;
 }
 
 async function makeAuthorizedRequest(uri: string, options?: RequestInit) {
