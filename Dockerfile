@@ -32,7 +32,7 @@ COPY backend/mvnw backend/pom.xml ./
 COPY backend/src/main/java ./src/main/java
 COPY backend/src/main/resources ./src/main/resources
 
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -B dependency:go-offline
 
 RUN apk update
 RUN apk add nginx
