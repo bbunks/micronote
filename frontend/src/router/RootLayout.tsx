@@ -1,6 +1,5 @@
 import { Outlet, useNavigate, useRouter } from "@tanstack/react-router";
 import { Header } from "../components/Header";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useEffect } from "react";
 import { AuthenticatedWatcher, AuthenticationState } from "../stores/AuthStore";
 import { useWatcherState } from "react-state-extended";
@@ -17,7 +16,7 @@ export function RootLayout() {
       auth === AuthenticationState.Unauthorized &&
       !UnauthRoutes.includes(state.location.pathname)
     ) {
-      navigate({ to: "/login" });
+      navigate({ to: "/login", replace: true });
     }
   }, [navigate, state.location.pathname, auth]);
 
@@ -25,7 +24,6 @@ export function RootLayout() {
     <>
       <Header />
       <Outlet />
-      <TanStackRouterDevtools />
     </>
   );
 }

@@ -18,7 +18,7 @@ export function LandingPage() {
     return resetHeader;
   }, []);
   return (
-    <div className="h-[720px] w-full relative pt-[120px]">
+    <div className="h-[720px] max-h-remaining-height w-full relative pt-[120px]">
       <div className="text-neutral-100 flex flex-col items-center gap-6">
         <h1 className="sm:text-6xl text-2xl">All your thoughts in one place</h1>
         <h1 className="sm:text-3xl text-xl">Easy to add, Easy to find</h1>

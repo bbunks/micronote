@@ -28,8 +28,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests((config) ->
                         config
-                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("/auth/**").permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)

@@ -7,6 +7,10 @@ export default {
         "header-height": "96px",
         "remaining-height": "calc(100vh - 96px)",
       },
+      maxHeight: {
+        "header-height": "96px",
+        "remaining-height": "calc(100vh - 96px)",
+      },
       space: {
         "header-height": "96px",
       },

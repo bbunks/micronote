@@ -37,7 +37,7 @@ export function NoteCard({ data: { note } }: Props) {
     <Card className="group">
       <div className="flex justify-between items-center relative">
         <h3 className="text-lg text-neutral-900">{note.title}</h3>
-        <p className="text-neutral-600 text-sm group-hover:opacity-0">
+        <p className="text-neutral-600 text-sm group-hover:opacity-0 whitespace-nowrap">
           {DateToString(note.createdDate)}
         </p>
         <div className="flex items-center gap-2 absolute -right-1">

@@ -46,15 +46,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refreshToken")
-    public String generateNewTokenForRefresh(@CookieValue("REFRESH_TOKEN") String refreshToken) {
+    public String generateNewTokenForRefresh(@CookieValue("REFRESH_TOKEN") String refreshToken, HttpServletResponse res) {
+
         String username = jwtService.extractUsername(refreshToken);
         UserDetails user = userService.findByEmail(username);
 
-        if (jwtService.validateToken(refreshToken,user)) {
+        if (jwtService.validateToken(refreshToken, user)) {
             return jwtService.generateToken(username, 15);
-        } else {
-            throw new UsernameNotFoundException("invalid user request!");
         }
+
+        res.setStatus(HttpStatus.FORBIDDEN.value());
+        throw new UsernameNotFoundException("invalid user request!");
     }
 
     @PostMapping("/createUser")

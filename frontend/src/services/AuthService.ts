@@ -40,6 +40,8 @@ function refreshToken() {
       .then((res) => {
         currentRequest = null;
 
+        console.log(res);
+
         if (res.status === 403) {
           logout();
           throw "Unauthorized";

@@ -13,8 +13,7 @@ export function LogoutPage() {
 
   useEffect(() => {
     AuthService.logout().then(() => {
-      navigate({ to: "/login" });
-      location.reload();
+      setTimeout(() => navigate({ to: "/login", replace: true }), 2000);
     });
   }, [navigate]);
 
