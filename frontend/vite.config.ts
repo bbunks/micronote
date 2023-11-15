@@ -9,8 +9,8 @@ export default defineConfig(({ command, mode }) => {
     build: {
       outDir:
         env.NODE_ENV === "production"
-          ? "../backend/src/main/resources/static"
-          : "./dist",
+          ? "./dist"
+          : "../backend/src/main/resources/static",
     },
     server: {
       proxy: {
