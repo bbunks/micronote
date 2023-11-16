@@ -43,7 +43,5 @@ COPY --from=react /app/dist /static
 COPY entrypoint.sh /app/entrypoint.sh
 
 EXPOSE 80
-
-RUN nginx
  
 CMD ["./entrypoint.sh"]

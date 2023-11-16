@@ -13,6 +13,7 @@ import { DevTool } from "@hookform/devtools";
 import { Tag } from "../../../types/Tag";
 import { updateTags } from "../../../stores/TagsStore";
 import { ChromePicker } from "react-color";
+import { FileInput } from "../../../components/input/FileInput";
 
 interface Props {
   closeModal: () => void;
@@ -98,6 +99,7 @@ export function NewNote({ closeModal }: Props) {
             lineCount={2}
             {...register("content")}
           />
+          <FileInput />
           <Controller
             control={control}
             defaultValue={[]}

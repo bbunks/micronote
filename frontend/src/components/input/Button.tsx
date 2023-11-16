@@ -29,7 +29,7 @@ const variants = {
   PrimaryInverse:
     "bg-neutral-100 text-primary hover:bg-neutral-200 hover:text-primary-dark active:bg-neutral-300 active:text-primary-darker",
   Neutral:
-    "bg-neutral-200 text-neutral-700 hover:bg-neutral-300 hover:text-neutral-700 active:bg-neutral active:text-neutral-800",
+    "bg-neutral-300 text-neutral-700 hover:bg-neutral-400 hover:text-neutral-700 active:bg-neutral active:text-neutral-800",
   NeutralInverse:
     "bg-neutral-900 text-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 active:bg-neutral-700 active:text-neutral-200",
 };
