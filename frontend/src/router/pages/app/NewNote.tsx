@@ -16,6 +16,7 @@ import { ChromePicker } from "react-color";
 
 interface Props {
   closeModal: () => void;
+  defaultNoteData: Note | null;
 }
 
 interface Inputs {
@@ -24,7 +25,7 @@ interface Inputs {
   tags: Tag[];
 }
 
-export function NewNote({ closeModal }: Props) {
+export function NewNote({ closeModal, defaultNoteData }: Props) {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [newTagOpen, setNewTagOpen] = useState(false);
   const [newTagName, setNewTagName] = useState("");
@@ -37,14 +38,25 @@ export function NewNote({ closeModal }: Props) {
     setValue,
   } = useForm<Inputs>({
     mode: "onChange",
+    defaultValues: {
+      title: defaultNoteData?.title,
+      content: defaultNoteData?.contents.find(
+        (ele) => ele.type === ContentType.TEXT
+      )?.value,
+      tags: defaultNoteData?.tags,
+    },
   });
 
   function onSubmit(data: Inputs) {
     const newNote: Partial<Note> = {
+      id: defaultNoteData?.id,
       title: data.title,
       contents: [
         ...arrayIfTrue<Content>(
           {
+            id: defaultNoteData?.contents.find(
+              (ele) => ele.type === ContentType.TEXT
+            )?.id,
             type: ContentType.TEXT,
             value: data.content,
           },
@@ -54,18 +66,34 @@ export function NewNote({ closeModal }: Props) {
       tags: data.tags,
     };
 
-    AuthService.makeAuthorizedRequest("/api/note", {
-      body: JSON.stringify(newNote),
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => {
-      if (res.ok) {
-        updateNotes(true);
-        updateTags(true);
-        closeModal();
-      }
-    });
+    if (defaultNoteData?.id) {
+      console.log(newNote);
+      AuthService.makeAuthorizedRequest("/api/note", {
+        body: JSON.stringify(newNote),
+        method: "PUT",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        if (res.ok) {
+          updateNotes(true);
+          updateTags(true);
+          closeModal();
+        }
+      });
+    } else {
+      AuthService.makeAuthorizedRequest("/api/note", {
+        body: JSON.stringify(newNote),
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        if (res.ok) {
+          updateNotes(true);
+          updateTags(true);
+          closeModal();
+        }
+      });
+    }
   }
 
   function confirmClose(e?: MouseEvent<HTMLButtonElement>) {
@@ -122,7 +150,7 @@ export function NewNote({ closeModal }: Props) {
             <Button variant="Neutral" onClick={confirmClose}>
               Cancel
             </Button>
-            <Button>Add</Button>
+            <Button>{defaultNoteData ? "Save" : "Add"}</Button>
           </div>
           <p>{errors.root?.message}</p>
         </form>
@@ -133,8 +161,9 @@ export function NewNote({ closeModal }: Props) {
           style={{ maxWidth: "500px" }}
         >
           <p>
-            Are you sure you would like to close this prompt? This will delete
-            all the notes contents.
+            {defaultNoteData
+              ? "Are you sure you would like to close this? This will discard all edits you have made to the note."
+              : "Are you sure you would like to close this? This will delete the note."}
           </p>
           <div className="flex justify-end gap-2">
             <Button
@@ -143,7 +172,9 @@ export function NewNote({ closeModal }: Props) {
             >
               Cancel
             </Button>
-            <Button onClick={closeModal}>Delete</Button>
+            <Button onClick={closeModal}>
+              {defaultNoteData ? "Discard" : "Delete"}
+            </Button>
           </div>
         </Modal>
       )}

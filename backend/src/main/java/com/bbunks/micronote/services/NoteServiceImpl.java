@@ -70,33 +70,83 @@ public class NoteServiceImpl implements NoteService{
                     newTag.setColor(tag.getColor());
                     newTag.setUser(user);
 
-                    // Save the newly created tag to the repository
+                    // Save the tag to the repository
                     newTag = tagRepository.save(newTag);
 
                     newTags.add(newTag);
                 } else {
-                    Tag existingTag = tagRepository.findByIdAndUserId(tag.getId(), user.getId()).orElse(null);
+                    Tag existingTag = tagRepository
+                            .findByIdAndUserId(tag.getId(), user.getId())
+                            .orElseThrow(() -> new RuntimeException("Tag with that id does not exist"));
 
-                    if (existingTag != null) {
-                        // Associate 'existingTag' with your 'note'
-                        newTags.add(existingTag);
-                    } else {
-                        // If the tag doesn't have an ID, create a new tag
-                        Tag newTag = new Tag();
-                        newTag.setLabel(tag.getLabel());
-                        newTag.setColor(tag.getColor());
-                        newTag.setUser(user);
-
-                        // Save the newly created tag to the repository
-                        newTag = tagRepository.save(newTag);
-
-                        newTags.add(newTag);
-                    }
+                    newTags.add(existingTag);
                 }
             }
 
             note.setTags(newTags);
             noteRepository.save(note);
+
+        }
+    }
+
+    @Override
+    public void updateNote(Note note) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+            User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+            note.setUser(user);
+
+            Note currentNote = noteRepository.findById(note.getId()).orElseThrow(() -> new RuntimeException("Note does not exist"));
+            if (!currentNote.getUser().equals(user)) throw new RuntimeException("Authenticated user does not own this note.");
+
+            for (int i = 0; i < note.getContents().size(); i++) {
+                NoteContent nc = note.getContents().get(i);
+                if (nc.getId() != null) {
+                    NoteContent existingNoteContent = currentNote.getContents().stream()
+                            .filter(noteContent -> nc.getId().equals(noteContent.getId()))
+                            .findAny()
+                            .orElseThrow(() -> new RuntimeException("Content to edit does not exist"));
+
+                    existingNoteContent.setType(nc.getType());
+                    existingNoteContent.setValue(nc.getValue());
+
+                    note.getContents().set(i, existingNoteContent);
+                } else {
+                    nc.setNote(note);
+                    nc.setUser(user);
+                }
+            }
+
+            Set<Tag> newTags = new HashSet<>();
+
+            for (Tag tag: note.getTags()) {
+                if (tag.getId() == null) {
+                    // If the tag doesn't have an ID, create a new tag
+                    Tag newTag = new Tag();
+                    newTag.setLabel(tag.getLabel());
+                    newTag.setColor(tag.getColor());
+                    newTag.setUser(user);
+
+                    // Save the tag to the repository
+                    newTag = tagRepository.saveAndFlush(newTag);
+
+                    newTags.add(newTag);
+                } else {
+
+                    // This could result in many extra db calls
+                    // Could do a single call to get all the potential tags and iterate locally
+
+                    Tag existingTag = tagRepository
+                            .findByIdAndUserId(tag.getId(), user.getId())
+                            .orElseThrow(() -> new RuntimeException("Tag with that id does not exist"));
+
+                    newTags.add(existingTag);
+                }
+            }
+
+            currentNote.setTags(newTags);
+            noteRepository.saveAndFlush(currentNote);
 
         }
     }

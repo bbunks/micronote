@@ -10,14 +10,16 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import AuthService from "../../../services/AuthService";
 import { updateNotes } from "../../../stores/NoteStore";
 import { updateTags } from "../../../stores/TagsStore";
+import { faPencil } from "@fortawesome/free-solid-svg-icons/faPencil";
 
 interface Props {
   data: {
     note: Note;
   };
+  onEdit: (note: Note) => void;
 }
 
-export function NoteCard({ data: { note } }: Props) {
+export function NoteCard({ data: { note }, onEdit }: Props) {
   const sortedContent = key((ele) => ele.type, note.contents);
   const images = sortedContent.get(ContentType.PICTURE);
   const text = sortedContent.get(ContentType.TEXT);
@@ -40,10 +42,17 @@ export function NoteCard({ data: { note } }: Props) {
         <p className="text-neutral-600 text-sm group-hover:opacity-0 whitespace-nowrap">
           {DateToString(note.createdDate)}
         </p>
-        <div className="flex items-center gap-2 absolute -right-1">
+        <div className="hidden group-hover:flex items-center absolute -right-1">
+          <Button
+            variant="NeutralWhite"
+            className="flex !p-3"
+            onClick={() => onEdit(note)}
+          >
+            <FontAwesomeIcon icon={faPencil} />
+          </Button>
           <Button
             variant="PrimaryInverse"
-            className="hidden group-hover:flex !p-3"
+            className="flex !p-3"
             onClick={deleteNote}
           >
             <FontAwesomeIcon icon={faTrash} />
@@ -65,7 +74,12 @@ export function NoteCard({ data: { note } }: Props) {
       {text &&
         text?.length > 0 &&
         text?.map((text, i) => (
-          <div key={"note" + note.id + "text" + i}>{text.value}</div>
+          <p
+            key={"note" + note.id + "text" + i}
+            className="whitespace-pre-line"
+          >
+            {text.value}
+          </p>
         ))}
       <div className="flex flex-wrap gap-2">
         {note.tags.map((ele) => (
