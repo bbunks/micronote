@@ -10,7 +10,6 @@ import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.User;
 import com.bbunks.micronote.enums.ContentType;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
