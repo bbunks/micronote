@@ -11,6 +11,8 @@ import AuthService from "../../../services/AuthService";
 import { updateNotes } from "../../../stores/NoteStore";
 import { updateTags } from "../../../stores/TagsStore";
 import { faPencil } from "@fortawesome/free-solid-svg-icons/faPencil";
+import { useState } from "react";
+import { Modal } from "../../../components/hoc/Modal";
 
 interface Props {
   data: {
@@ -20,6 +22,8 @@ interface Props {
 }
 
 export function NoteCard({ data: { note }, onEdit }: Props) {
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+
   const sortedContent = key((ele) => ele.type, note.contents);
   const images = sortedContent.get(ContentType.PICTURE);
   const text = sortedContent.get(ContentType.TEXT);
@@ -31,6 +35,7 @@ export function NoteCard({ data: { note }, onEdit }: Props) {
       if (res.ok) {
         updateNotes(true);
         updateTags(true);
+        setConfirmationOpen(false);
       }
     });
   }
@@ -53,7 +58,7 @@ export function NoteCard({ data: { note }, onEdit }: Props) {
           <Button
             variant="PrimaryInverse"
             className="flex !p-3"
-            onClick={deleteNote}
+            onClick={() => setConfirmationOpen(true)}
           >
             <FontAwesomeIcon icon={faTrash} />
           </Button>
@@ -90,6 +95,23 @@ export function NoteCard({ data: { note }, onEdit }: Props) {
           />
         ))}
       </div>
+      {confirmationOpen && (
+        <Modal
+          onBgClick={() => setConfirmationOpen(false)}
+          style={{ maxWidth: "500px" }}
+        >
+          <p>Are you sure you would like delete this note?</p>
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="Neutral"
+              onClick={() => setConfirmationOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={deleteNote}>Delete</Button>
+          </div>
+        </Modal>
+      )}
     </Card>
   );
 }

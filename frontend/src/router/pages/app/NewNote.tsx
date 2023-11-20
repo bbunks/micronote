@@ -29,23 +29,19 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [newTagOpen, setNewTagOpen] = useState(false);
   const [newTagName, setNewTagName] = useState("");
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useForm<Inputs>({
-    mode: "onChange",
-    defaultValues: {
-      title: defaultNoteData?.title,
-      content: defaultNoteData?.contents.find(
-        (ele) => ele.type === ContentType.TEXT
-      )?.value,
-      tags: defaultNoteData?.tags,
-    },
-  });
+  const { register, handleSubmit, control, formState, getValues, setValue } =
+    useForm<Inputs>({
+      mode: "onChange",
+      defaultValues: {
+        title: defaultNoteData?.title ?? "",
+        content:
+          defaultNoteData?.contents.find((ele) => ele.type === ContentType.TEXT)
+            ?.value ?? "",
+        tags: defaultNoteData?.tags ?? [],
+      },
+    });
+
+  const { errors, isDirty } = formState;
 
   function onSubmit(data: Inputs) {
     const newNote: Partial<Note> = {
@@ -98,7 +94,8 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
 
   function confirmClose(e?: MouseEvent<HTMLButtonElement>) {
     e?.preventDefault();
-    setConfirmationOpen(true);
+    if (isDirty) setConfirmationOpen(true);
+    else closeModal();
   }
 
   function createTag(data: TagInputs) {
