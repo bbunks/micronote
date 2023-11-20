@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.count();
     }
 
-    public String addUser(UserInfo userInfo) {
+    public User addUser(UserInfo userInfo) {
 
         User existingUser =
                 userRepository
@@ -59,9 +59,8 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userInfo.getLastName());
         user.setEmail(userInfo.getEmail());
         user.setPassword(userInfo.getPassword());
-
-        userRepository.save(user);
-        return "User Added Successfully";
+        
+        return userRepository.save(user);
     }
 
     @Override

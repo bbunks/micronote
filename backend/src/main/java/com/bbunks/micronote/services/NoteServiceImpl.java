@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class NoteServiceImpl implements NoteService{
+public class NoteServiceImpl implements NoteService {
     @Autowired
     UserRepository userRepository;
 
@@ -43,62 +43,67 @@ public class NoteServiceImpl implements NoteService{
             int contentsLength = (contentTypes != null) ? contentTypes.size() : 0;
 
             return noteRepository.findNotesByUserAndTagsAndContentTypes(user.getId(), tagIds, contentTypes, tagsLength, contentsLength);
-            //return noteRepository.findByUserId(user.getId(), Sort.by(Sort.Direction.DESC, "createdDate"));
         }
 
         return Collections.emptyList();
     }
 
     @Override
-    public void createNote(Note note) {
+    public Note createNote(Note note) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
+
             note.setUser(user);
-            for (NoteContent nc: note.getContents()) {
+            for (NoteContent nc : note.getContents()) {
                 nc.setNote(note);
             }
 
-            Set<Tag> newTags = new HashSet<>();
+            if (note.getTags() != null) {
+                Set<Tag> newTags = new HashSet<>();
+                for (Tag tag : note.getTags()) {
+                    if (tag.getId() == null) {
+                        // If the tag doesn't have an ID, create a new tag
+                        Tag newTag = new Tag();
+                        newTag.setLabel(tag.getLabel());
+                        newTag.setColor(tag.getColor());
+                        newTag.setUser(user);
 
-            for (Tag tag: note.getTags()) {
-                if (tag.getId() == null) {
-                    // If the tag doesn't have an ID, create a new tag
-                    Tag newTag = new Tag();
-                    newTag.setLabel(tag.getLabel());
-                    newTag.setColor(tag.getColor());
-                    newTag.setUser(user);
+                        // Save the tag to the repository
+                        newTag = tagRepository.save(newTag);
 
-                    // Save the tag to the repository
-                    newTag = tagRepository.save(newTag);
+                        newTags.add(newTag);
+                    } else {
+                        Tag existingTag = tagRepository
+                                .findByIdAndUserId(tag.getId(), user.getId())
+                                .orElseThrow(() -> new RuntimeException("Tag with that id does not exist"));
 
-                    newTags.add(newTag);
-                } else {
-                    Tag existingTag = tagRepository
-                            .findByIdAndUserId(tag.getId(), user.getId())
-                            .orElseThrow(() -> new RuntimeException("Tag with that id does not exist"));
-
-                    newTags.add(existingTag);
+                        newTags.add(existingTag);
+                    }
                 }
+
+                note.setTags(newTags);
             }
 
-            note.setTags(newTags);
-            noteRepository.save(note);
-
+            return noteRepository.save(note);
         }
+
+        throw new RuntimeException("User is not authorized");
     }
 
     @Override
-    public void updateNote(Note note) {
+    public Note updateNote(Note note) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-            note.setUser(user);
 
             Note currentNote = noteRepository.findById(note.getId()).orElseThrow(() -> new RuntimeException("Note does not exist"));
-            if (!currentNote.getUser().equals(user)) throw new RuntimeException("Authenticated user does not own this note.");
+            if (!currentNote.getUser().equals(user))
+                throw new RuntimeException("Authenticated user does not own this note.");
+
+            note.setUser(user);
 
             for (int i = 0; i < note.getContents().size(); i++) {
                 NoteContent nc = note.getContents().get(i);
@@ -120,7 +125,7 @@ public class NoteServiceImpl implements NoteService{
 
             Set<Tag> newTags = new HashSet<>();
 
-            for (Tag tag: note.getTags()) {
+            for (Tag tag : note.getTags()) {
                 if (tag.getId() == null) {
                     // If the tag doesn't have an ID, create a new tag
                     Tag newTag = new Tag();
@@ -146,9 +151,10 @@ public class NoteServiceImpl implements NoteService{
             }
 
             currentNote.setTags(newTags);
-            noteRepository.saveAndFlush(currentNote);
-
+            return noteRepository.save(currentNote);
         }
+
+        throw new RuntimeException("User is not authorized");
     }
 
     @Override
@@ -160,13 +166,13 @@ public class NoteServiceImpl implements NoteService{
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
             Note note = noteRepository.findById(id).orElseThrow();
 
-            for (Tag tag: note.getTags()) {
+            for (Tag tag : note.getTags()) {
                 Long count = tag.getNotes().stream().count();
                 System.out.println(tag.getId());
                 if (count == 1) tagRepository.delete(tag);
             }
 
-            if(Objects.equals(user.getId(), note.getUser().getId()))
+            if (Objects.equals(user.getId(), note.getUser().getId()))
                 noteRepository.deleteById(id);
         }
     }
