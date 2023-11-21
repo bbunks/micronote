@@ -21,3 +21,9 @@ export function key<T>(
 
   return outMap;
 }
+
+export function reverseArray<T>(array: Array<T>) {
+  const rev = [...array];
+  rev.reverse();
+  return rev;
+}

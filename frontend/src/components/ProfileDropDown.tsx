@@ -20,8 +20,9 @@ export function ProfileDropDown() {
                 className={`${
                   active && "bg-neutral-300"
                 } py-2 px-4 rounded-[24px] flex items-center justify-between`}
+                onClick={() => navigate({ to: "/report" })}
               >
-                <p className="w-max">Account settings</p>
+                <p className="w-max">Report</p>
               </div>
             )}
           </Menu.Item>

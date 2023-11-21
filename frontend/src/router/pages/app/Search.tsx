@@ -84,7 +84,10 @@ export function Search() {
             control: () => "!min-h-0",
             menu: () =>
               "bg-neutral-100 left-0 !top-[calc(100%+12px)] rounded-[24px] p-3 border-primary border-solid border-4",
-            option: () => "hover:bg-gray-500 hover:bg-opacity-10 p-3",
+            option: () =>
+              "hover:bg-gray-500 hover:bg-opacity-10 py-3 px-4 rounded-full",
+            noOptionsMessage: () => "py-3",
+            groupHeading: () => "px-2 pb-1 mb-1 pt-1 mt-1 border-y",
             placeholder: () => "text-neutral-500",
             multiValueRemove: () => "!m-0 !p-0",
           }}

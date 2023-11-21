@@ -8,6 +8,7 @@ import { TestPage } from "./pages/test/TestPage";
 import { LogoutPage } from "./pages/logout/LogoutPage";
 import { AboutPage } from "./pages/about/AboutPage";
 import { SignupPage } from "./pages/signup/SignupPage";
+import { ReportPage } from "./pages/report/ReportPage";
 
 // Create a root route
 const rootRoute = new RootRoute({
@@ -57,6 +58,12 @@ const testRoute = new Route({
   component: TestPage,
 });
 
+const reportRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/report",
+  component: ReportPage,
+});
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute.addChildren([
@@ -66,6 +73,7 @@ const routeTree = rootRoute.addChildren([
     logoutRoute,
     aboutRoute,
     signupPage,
+    reportRoute,
   ]),
 ]);
 
