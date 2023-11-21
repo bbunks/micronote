@@ -151,6 +151,7 @@ public class NoteServiceImpl implements NoteService {
             }
 
             currentNote.setTags(newTags);
+            currentNote.setTitle(note.getTitle());
             return noteRepository.save(currentNote);
         }
 

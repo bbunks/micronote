@@ -1,10 +1,22 @@
 services:
+  # api:
+  #   build: .
+  #   environment:
+  #     - DB_URL=db
+  #     - DB_USERNAME=micronote
+  #     - DB_PASSWORD=asecurepassword
+  #     - JWT_SECRET=113041444b202da38545c4b24448d30550f6764f1af267da3be60298b3ed2492
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - "80:80"
   api:
-    build: .
+    image: ghcr.io/bbunks/notes
     environment:
       - DB_URL=db
       - DB_USERNAME=micronote
       - DB_PASSWORD=asecurepassword
+      - JWT_SECRET=113041444b202da38545c4b24448d30550f6764f1af267da3be60298b3ed2492
     depends_on:
       - db
     ports:
