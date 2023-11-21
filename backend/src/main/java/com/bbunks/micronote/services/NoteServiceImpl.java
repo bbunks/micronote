@@ -165,11 +165,14 @@ public class NoteServiceImpl implements NoteService {
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
             Note note = noteRepository.findById(id).orElseThrow();
+            Set<Tag> tags = note.getTags();
 
-            for (Tag tag : note.getTags()) {
-                Long count = tag.getNotes().stream().count();
-                System.out.println(tag.getId());
-                if (count == 1) tagRepository.delete(tag);
+            if (tags != null) {
+                for (Tag tag : note.getTags()) {
+                    long count = tags.size();
+                    System.out.println(tag.getId());
+                    if (count == 1) tagRepository.delete(tag);
+                }
             }
 
             if (Objects.equals(user.getId(), note.getUser().getId()))

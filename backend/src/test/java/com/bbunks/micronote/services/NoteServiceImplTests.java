@@ -10,6 +10,7 @@ import com.bbunks.micronote.entities.Note;
 import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.User;
 import com.bbunks.micronote.enums.ContentType;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -146,6 +147,17 @@ class NoteServiceImplTests {
     @Test
     @WithMockUser(username = "other@test.com")
     void ensureUserOnlySeesOwnNotes() {
+        List<Note> result = noteService.getNotes(filters);
+
+        // Assertions
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @WithMockUser(username = "test@test.com")
+    @Transactional
+    void notesAreDeleted() {
+        noteService.deleteNoteById(note.getId());
         List<Note> result = noteService.getNotes(filters);
 
         // Assertions

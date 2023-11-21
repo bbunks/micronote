@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @SpringBootTest
-@EntityScan(basePackages = "com.bbunks.micronote.entities")
 class MicronoteApplicationTests {
 
 	@Test
