@@ -9,7 +9,6 @@ import { arrayIfTrue } from "../../../utils/Array";
 import { Content, ContentType } from "../../../types/Content";
 import AuthService from "../../../services/AuthService";
 import { updateNotes } from "../../../stores/NoteStore";
-import { DevTool } from "@hookform/devtools";
 import { Tag } from "../../../types/Tag";
 import { updateTags } from "../../../stores/TagsStore";
 import { ChromePicker } from "react-color";
@@ -109,7 +108,6 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
 
   return (
     <>
-      <DevTool control={control} />
       <Modal onBgClick={confirmClose}>
         <h1 className="text-xl">Add a note</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
