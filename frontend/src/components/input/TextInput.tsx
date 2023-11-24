@@ -8,7 +8,7 @@ interface Props {
 }
 
 const BaseClassNames =
-  "text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5 p";
+  "text-neutral-900 py-2 bg-transparent outline-none p-transition hover:bg-gray-500 hover:bg-opacity-10 focus:px-2 focus:bg-gray-500 focus:bg-opacity-5 ";
 
 export const TextInput = forwardRef<
   HTMLInputElement & HTMLTextAreaElement,
