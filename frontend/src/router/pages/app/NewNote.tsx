@@ -146,7 +146,8 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
             <Button
               className="flex !p-3 relative"
               variant="Neutral"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setNewTagName("");
                 setNewTagOpen(true);
               }}
