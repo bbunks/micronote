@@ -31,10 +31,7 @@ export function Header() {
               <Logo />
             </Link>
           )}
-          {!isMobile &&
-            currentSettings.centralElement &&
-            currentSettings.centralElement &&
-            (currentSettings.showProfile || currentSettings.centralElement)}
+          {!isMobile && currentSettings.centralElement}
 
           {
             <div className="flex gap-2">

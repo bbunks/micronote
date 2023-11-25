@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 export function useMobile(onChange: () => void) {
   const { width } = useWindowSize();
-  const newStatus = width ?? 0 <= 640;
+  const newStatus = (width ?? 0) <= 640;
 
   const currentStatusRef = useRef(newStatus);
 
