@@ -12,6 +12,8 @@ import { updateNotes } from "../../../stores/NoteStore";
 import { Tag } from "../../../types/Tag";
 import { updateTags } from "../../../stores/TagsStore";
 import { ChromePicker } from "react-color";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   closeModal: () => void;
@@ -121,25 +123,37 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
             lineCount={2}
             {...register("content")}
           />
-          <Controller
-            control={control}
-            defaultValue={[]}
-            name="tags"
-            render={({ field }) => {
-              return (
-                <TagMultiSelect
-                  name={field.name}
-                  onChange={(data, meta) => {
-                    if (meta.action === "select-option" && meta.option?.new) {
-                      setNewTagName(meta.option.label ?? "");
-                      setNewTagOpen(true);
-                    } else field.onChange(data, meta);
-                  }}
-                  value={field.value}
-                />
-              );
-            }}
-          />
+          <div className="flex items-end gap-4">
+            <Controller
+              control={control}
+              defaultValue={[]}
+              name="tags"
+              render={({ field }) => {
+                return (
+                  <TagMultiSelect
+                    name={field.name}
+                    onChange={(data, meta) => {
+                      if (meta.action === "select-option" && meta.option?.new) {
+                        setNewTagName(meta.option.label ?? "");
+                        setNewTagOpen(true);
+                      } else field.onChange(data, meta);
+                    }}
+                    value={field.value}
+                  />
+                );
+              }}
+            />
+            <Button
+              className="flex !p-3 relative"
+              variant="Neutral"
+              onClick={() => {
+                setNewTagName("");
+                setNewTagOpen(true);
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </div>
 
           <div className="flex justify-end gap-2">
             <Button variant="Neutral" onClick={confirmClose}>
@@ -176,7 +190,7 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
       {newTagOpen && (
         <NewTag
           onSubmit={createTag}
-          closeModal={() => setConfirmationOpen(false)}
+          closeModal={() => setNewTagOpen(false)}
           label={newTagName}
         />
       )}
@@ -229,7 +243,13 @@ function NewTag({ onSubmit, closeModal, label }: NewTagProps) {
         />
 
         <div className="flex justify-end gap-2">
-          <Button variant="Neutral" onClick={closeModal}>
+          <Button
+            variant="Neutral"
+            onClick={(e) => {
+              e.preventDefault();
+              closeModal();
+            }}
+          >
             Cancel
           </Button>
           <Button>Add</Button>

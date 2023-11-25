@@ -55,6 +55,7 @@ export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
       label="Tags"
       menuPosition="fixed"
       name={name}
+      className="grow"
       options={options}
       components={{
         MultiValueContainer: SelectTagChip,
