@@ -23,7 +23,7 @@ export function ProfileDropDown() {
         </Menu.Button>
         <Menu.Items className="absolute top-full flex flex-col items-stretch right-0 bg-neutral-100 p-4 mt-4 rounded-[24px] gap-2 border-2 border-solid border-primary">
           {/* Settings */}
-          <Menu.Item>
+          {/* <Menu.Item>
             {({ active }) => (
               <div
                 className={`${
@@ -34,7 +34,7 @@ export function ProfileDropDown() {
                 <p className="w-max">Report</p>
               </div>
             )}
-          </Menu.Item>
+          </Menu.Item> */}
 
           {/* Sign Out */}
           <Menu.Item>
