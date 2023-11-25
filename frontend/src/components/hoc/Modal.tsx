@@ -17,7 +17,7 @@ export function Modal({
       {createPortal(
         <div
           onClick={onBgClick}
-          className="fixed top-0 right-0 left-0 bottom-0 bg-black z-10 bg-opacity-40 flex flex-col justify-center items-center"
+          className="fixed top-0 right-0 left-0 bottom-0 bg-black z-10 bg-opacity-40 flex flex-col justify-center items-center p-4"
         >
           <Card
             className="max-w-[600px] w-full"
