@@ -21,7 +21,7 @@ export function ProfileDropDown() {
           <FontAwesomeIcon icon={faUser} />{" "}
           <FontAwesomeIcon icon={faChevronDown} />
         </Menu.Button>
-        <Menu.Items className="absolute top-full flex flex-col items-stretch right-0 bg-neutral-100 p-4 mt-4 rounded-[24px] gap-2 border-2 border-solid border-primary">
+        <Menu.Items className="absolute top-full flex flex-col items-stretch right-0 bg-neutral-100 p-4 mt-4 rounded-[24px] gap-2 border-4 border-solid border-primary">
           {/* Settings */}
           {/* <Menu.Item>
             {({ active }) => (

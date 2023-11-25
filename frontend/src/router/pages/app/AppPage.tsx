@@ -94,7 +94,7 @@ export function AppPage({ columnWidth = 360 }: Props) {
           <Masonry
             key={iter.current}
             items={notes.map((ele) => ({ note: ele }))}
-            columnGutter={16}
+            columnGutter={8}
             columnWidth={columnWidth}
             overscanBy={5}
             render={CardWithClick}
