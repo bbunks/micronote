@@ -86,17 +86,19 @@ export function NoteCard({ data: { note }, onEdit }: Props) {
             {text.value}
           </p>
         ))}
-      <div className="flex flex-wrap gap-2">
-        {note.tags
-          .sort((a, b) => a.label.localeCompare(b.label))
-          .map((ele) => (
-            <TagChip
-              label={ele.label}
-              color={ele.color}
-              key={note.id + "tag" + ele.id}
-            />
-          ))}
-      </div>
+      {note.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {note.tags
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .map((ele) => (
+              <TagChip
+                label={ele.label}
+                color={ele.color}
+                key={note.id + "tag" + ele.id}
+              />
+            ))}
+        </div>
+      )}
       {confirmationOpen && (
         <Modal
           onBgClick={() => setConfirmationOpen(false)}
