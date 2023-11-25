@@ -1,4 +1,8 @@
-import { notesWatcher, useNotes } from "../../../stores/NoteStore";
+import {
+  notesWatcher,
+  queryWatcher,
+  useNotes,
+} from "../../../stores/NoteStore";
 import { LoadingIndicator } from "../../../components/Loading";
 import { NoteCard } from "./NoteCard";
 import { Masonry } from "masonic";
@@ -6,12 +10,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   resetHeader,
   setCentralElement,
+  setNavToggleElement,
 } from "../../../stores/HeaderSettingsStore";
 import { Search } from "./Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { NewNote } from "./NewNote";
 import { Note } from "../../../types/Note";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useWatcherState } from "react-state-extended";
 
 interface Props {
   columnWidth?: number;
@@ -23,12 +30,26 @@ export function AppPage({ columnWidth = 360 }: Props) {
   const iter = useRef(0);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
+  const [filters] = useWatcherState(queryWatcher);
+
+  const filterCount = filters.length ?? 0;
+
   // Implement Search bar into header
   useEffect(() => {
     notesWatcher.addRule(() => iter.current++);
     setCentralElement(<Search />);
+    setNavToggleElement(
+      <>
+        <FontAwesomeIcon className="h-5 w-5" icon={faMagnifyingGlass} />
+        {filterCount !== 0 && (
+          <p className="absolute -top-1 -right-1 bg-neutral-100 rounded-full h-5 w-5 text-primary flex items-center justify-center">
+            {filterCount}
+          </p>
+        )}
+      </>
+    );
     return resetHeader;
-  }, []);
+  }, [filterCount]);
 
   const CardWithClick = useCallback(
     (props: { data: { note: Note } }) => (

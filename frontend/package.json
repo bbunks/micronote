@@ -17,6 +17,7 @@
     "@hookform/devtools": "^4.3.1",
     "@tanstack/react-router": "0.0.1-beta.207",
     "@tanstack/router-devtools": "0.0.1-beta.207",
+    "@uidotdev/usehooks": "^2.4.1",
     "luxon": "^3.4.3",
     "masonic": "^3.7.0",
     "qs": "^6.11.2",

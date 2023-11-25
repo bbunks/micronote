@@ -59,7 +59,7 @@ export function Search() {
   ];
 
   return (
-    <div className="relative flex flex-col items-stretch bg-neutral-100 px-4 py-3 rounded-full gap-3 flex-grow max-w-[800px] mx-[72px]">
+    <div className="relative flex flex-col items-stretch bg-neutral-100 px-4 py-3 rounded-[24px] gap-3 flex-grow max-w-[800px]">
       <div className="flex flex-row items-center gap-3">
         <FontAwesomeIcon
           className="text-neutral-900"
