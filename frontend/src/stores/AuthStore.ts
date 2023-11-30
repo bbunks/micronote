@@ -10,4 +10,3 @@ export enum AuthenticationState {
 export const AuthenticatedWatcher = new Watcher<AuthenticationState>(
   AuthenticationState.Authorizing
 );
-AuthenticatedWatcher.addListener((v) => console.log(v));

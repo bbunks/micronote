@@ -40,8 +40,6 @@ function refreshToken() {
       .then((res) => {
         currentRequest = null;
 
-        console.log(res);
-
         if (res.status === 403) {
           logout();
           throw "Unauthorized";
@@ -72,8 +70,6 @@ async function makeAuthorizedRequest(uri: string, options?: RequestInit) {
       ...rest,
     });
   }
-
-  console.log(uri);
 
   if (
     AuthenticatedWatcher.value !== AuthenticationState.Authorized ||
@@ -114,7 +110,6 @@ async function signup(
       password,
     }),
   });
-  console.log(res);
 
   if (res.ok) {
     const token = await res.text();

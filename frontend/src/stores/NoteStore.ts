@@ -48,7 +48,6 @@ export function updateNotes(force?: boolean) {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log("Updating Notes");
         notesWatcher.value = json;
         isLoading = false;
         isRevalidating = false;
