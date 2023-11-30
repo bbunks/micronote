@@ -64,7 +64,6 @@ export function NewNote({ closeModal, defaultNoteData }: Props) {
     };
 
     if (defaultNoteData?.id) {
-      console.log(newNote);
       AuthService.makeAuthorizedRequest("/api/note", {
         body: JSON.stringify(newNote),
         method: "PUT",

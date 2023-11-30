@@ -12,6 +12,7 @@ import {
   mapSearchObjects,
   mapToSearchObject,
 } from "../../../utils/SearchQS";
+import { arrayIfTrue } from "../../../utils/Array";
 
 type Option = {
   label: string;
@@ -23,18 +24,19 @@ export function Search() {
   // const [inputString, setInputString] = useState("");
   const { state, isLoading } = useTags();
 
-  if (isLoading) return <></>;
-
   const options: Option[] = [
-    {
-      label: "Tags",
-      options: state.map((ele) => ({
-        type: "tag",
-        label: ele.label,
-        value: ele.id,
-        color: ele.color,
-      })),
-    },
+    ...arrayIfTrue<Option>(
+      {
+        label: "Tags",
+        options: state.map((ele) => ({
+          type: "tag",
+          label: ele.label,
+          value: ele.id,
+          color: ele.color,
+        })),
+      },
+      !isLoading
+    ),
     {
       label: "Content Type",
       options: ["Picture", "Text"].map((ele) => ({

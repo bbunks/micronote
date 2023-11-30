@@ -31,45 +31,48 @@ export function Header() {
               <Logo />
             </Link>
           )}
-          {!isMobile && currentSettings.centralElement}
-
-          {
-            <div className="flex gap-2">
-              {isMobile && currentSettings.centralElement && (
-                <Button
-                  className="self-start flex !p-3 relative"
-                  onClick={() => {
-                    setShowCenter((p) => {
-                      if (!p) {
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }
-                      return !p;
-                    });
-                  }}
+          {currentSettings.centralElement && (
+            <>
+              {!isMobile && currentSettings.centralElement}
+              <div className="flex gap-2">
+                {isMobile && (
+                  <Button
+                    className="self-start flex !p-3 relative"
+                    onClick={() => {
+                      setShowCenter((p) => {
+                        if (!p) {
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                        return !p;
+                      });
+                    }}
+                  >
+                    {currentSettings.navToggleElement}
+                  </Button>
+                )}
+                {currentSettings.showProfile && <ProfileDropDown />}
+              </div>
+              {isMobile && showCenter && (
+                <div
+                  className="px-5 pb-5 absolute bg-primary left-0 right-0 top-full"
+                  ref={ref}
                 >
-                  {currentSettings.navToggleElement}
-                </Button>
+                  {currentSettings.centralElement}
+                </div>
               )}
-              {currentSettings.showProfile && <ProfileDropDown />}
-            </div>
-          }
-          {isMobile && showCenter && currentSettings.centralElement && (
-            <div
-              className="px-5 pb-5 absolute bg-primary left-0 right-0 top-full"
-              ref={ref}
-            >
-              {currentSettings.centralElement}
-            </div>
+            </>
           )}
         </div>
       </div>
       <div className="h-header-height w-full" />
-      <div
-        style={{
-          height: showCenter ? height ?? 68 : 0,
-        }}
-        className="w-full"
-      />
+      {isMobile && showCenter && (
+        <div
+          className="w-full"
+          style={{
+            height: height ?? 0,
+          }}
+        />
+      )}
     </>
   );
 }
