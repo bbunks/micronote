@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:16-alpine AS deps
+FROM node:18-alpine AS deps
 
 RUN apk add --no-cache libc6-compat
 
@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 RUN pnpm install --no-frozen-lockfile
 
 # Build the react
-FROM node:16-alpine AS react
+FROM node:18-alpine AS react
 
 WORKDIR /app
 
@@ -23,12 +23,12 @@ RUN npm run build
 
 # Build the spring app
 FROM eclipse-temurin:17-jdk-alpine as api
- 
+
 WORKDIR /app
- 
+
 COPY backend/.mvn/ .mvn
 COPY backend/mvnw backend/pom.xml ./
- 
+
 COPY backend/src/main/java ./src/main/java
 COPY backend/src/main/resources ./src/main/resources
 
@@ -45,5 +45,5 @@ COPY entrypoint.sh /app/entrypoint.sh
 EXPOSE 80
 
 RUN nginx
- 
+
 CMD ["./entrypoint.sh"]
