@@ -24,7 +24,8 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
                 "AND (:contentCount = 0 OR :contentTypes IS NULL OR nc.type IN :contentTypes) " +
             "GROUP BY n " +
             "HAVING (:tagCount = 0 OR COUNT(DISTINCT t.id) = :tagCount) "+
-                "AND (:contentCount = 0 OR COUNT(DISTINCT nc.type) = :contentCount) ")
+                "AND (:contentCount = 0 OR COUNT(DISTINCT nc.type) = :contentCount) " +
+            "ORDER BY n.createdDate DESC")
     List<Note> findNotesByUserAndTagsAndContentTypes(
             @Param("userId") Long userId,
             @Param("tagIds") List<Long> tagIds,

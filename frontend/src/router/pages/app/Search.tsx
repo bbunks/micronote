@@ -12,6 +12,7 @@ import {
   mapSearchObjects,
   mapToSearchObject,
 } from "../../../utils/SearchQS";
+import { arrayIfTrue } from "../../../utils/Array";
 
 type Option = {
   label: string;
@@ -23,18 +24,19 @@ export function Search() {
   // const [inputString, setInputString] = useState("");
   const { state, isLoading } = useTags();
 
-  if (isLoading) return <></>;
-
   const options: Option[] = [
-    {
-      label: "Tags",
-      options: state.map((ele) => ({
-        type: "tag",
-        label: ele.label,
-        value: ele.id,
-        color: ele.color,
-      })),
-    },
+    ...arrayIfTrue<Option>(
+      {
+        label: "Tags",
+        options: state.map((ele) => ({
+          type: "tag",
+          label: ele.label,
+          value: ele.id,
+          color: ele.color,
+        })),
+      },
+      !isLoading
+    ),
     {
       label: "Content Type",
       options: ["Picture", "Text"].map((ele) => ({
@@ -59,7 +61,7 @@ export function Search() {
   ];
 
   return (
-    <div className="relative flex flex-col items-stretch bg-neutral-100 px-4 py-3 rounded-full gap-3 flex-grow max-w-[800px] mx-[72px]">
+    <div className="relative flex flex-col items-stretch bg-neutral-100 px-4 py-3 rounded-[24px] gap-3 flex-grow max-w-[800px]">
       <div className="flex flex-row items-center gap-3">
         <FontAwesomeIcon
           className="text-neutral-900"
@@ -84,7 +86,10 @@ export function Search() {
             control: () => "!min-h-0",
             menu: () =>
               "bg-neutral-100 left-0 !top-[calc(100%+12px)] rounded-[24px] p-3 border-primary border-solid border-4",
-            option: () => "hover:bg-gray-500 hover:bg-opacity-10 p-3",
+            option: () =>
+              "hover:bg-gray-500 hover:bg-opacity-10 py-3 px-4 rounded-full",
+            noOptionsMessage: () => "py-3",
+            groupHeading: () => "px-2 pb-1 mb-1 pt-1 mt-1 border-y",
             placeholder: () => "text-neutral-500",
             multiValueRemove: () => "!m-0 !p-0",
           }}

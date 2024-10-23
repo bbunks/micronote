@@ -20,11 +20,13 @@ export function LandingPage() {
   return (
     <div className="h-[720px] max-h-remaining-height w-full relative pt-[120px]">
       <div className="text-neutral-100 flex flex-col items-center gap-6">
-        <h1 className="sm:text-6xl text-2xl">All your thoughts in one place</h1>
+        <h1 className="lg:text-6xl sm:text-4xl text-2xl text-center">
+          All your thoughts in one place
+        </h1>
         <h1 className="sm:text-3xl text-xl">Easy to add, Easy to find</h1>
         <Link to="/login">
           <Button variant="PrimaryInverse">
-            Find your notes{" "}
+            Get Started
             <FontAwesomeIcon className="ml-4" icon={faArrowRight} />
           </Button>
         </Link>

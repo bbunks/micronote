@@ -9,7 +9,9 @@ import java.util.List;
 public interface NoteService {
     List<Note> getNotes(FilterRequest filters);
 
-    void createNote(Note note);
+    Note createNote(Note note);
+
+    Note updateNote(Note note);
 
     void deleteNoteById(Long id);
 }

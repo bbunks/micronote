@@ -25,8 +25,6 @@ export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
   const { state } = useTags();
   const [inputString, setInputString] = useState("");
 
-  console.log(inputString);
-
   const options = [
     ...state.map((ele) => ({ ...ele, value: ele.id })),
     ...arrayIfTrue(
@@ -57,6 +55,7 @@ export const TagMultiSelect = ({ onChange, value, name }: SelectProps) => {
       label="Tags"
       menuPosition="fixed"
       name={name}
+      className="grow"
       options={options}
       components={{
         MultiValueContainer: SelectTagChip,

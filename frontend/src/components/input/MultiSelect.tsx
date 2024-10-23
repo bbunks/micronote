@@ -11,11 +11,16 @@ export function MultiSelect<T>({
   classNames,
   containerClassNames,
   label,
+  className,
   unstyled = false,
   ...rest
 }: Partial<SelectProps<T>>) {
   return (
-    <div className="border-b-2 border-b-neutral-900 flex flex-col gap-[4px]">
+    <div
+      className={
+        "border-b-2 border-b-neutral-900 flex flex-col gap-[4px] " + className
+      }
+    >
       {label && <p className="text-neutral-900">{label}</p>}
       <Select
         isMulti

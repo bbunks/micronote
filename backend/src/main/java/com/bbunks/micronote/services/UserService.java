@@ -15,6 +15,6 @@ public interface UserService extends UserDetailsService {
 
     Long getCount();
 
-    String addUser(UserInfo userInfo);
+    User addUser(UserInfo userInfo);
 
 }

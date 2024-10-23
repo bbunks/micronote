@@ -36,8 +36,10 @@ export function LoginPage() {
   const [authenticated] = useWatcherState(AuthenticatedWatcher);
 
   useEffect(() => {
+    AuthService.refreshToken();
+
     if (authenticated === AuthenticationState.Authorized) {
-      navigate({ to: "/app" });
+      navigate({ to: "/app", replace: true });
     }
   }, [authenticated, navigate]);
 
