@@ -1,5 +1,17 @@
 package com.bbunks.micronote.services;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
 import com.bbunks.micronote.dao.NoteRepository;
 import com.bbunks.micronote.dao.TagRepository;
 import com.bbunks.micronote.dao.UserRepository;
@@ -9,18 +21,12 @@ import com.bbunks.micronote.entities.NoteContent;
 import com.bbunks.micronote.entities.Tag;
 import com.bbunks.micronote.entities.User;
 import com.bbunks.micronote.enums.ContentType;
-import jakarta.transaction.Transactional;
-import org.apache.catalina.filters.RequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
-import java.util.*;
+import jakarta.transaction.Transactional;
 
 @Service
 public class NoteServiceImpl implements NoteService {
+
     @Autowired
     UserRepository userRepository;
 
@@ -100,8 +106,9 @@ public class NoteServiceImpl implements NoteService {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
             Note currentNote = noteRepository.findById(note.getId()).orElseThrow(() -> new RuntimeException("Note does not exist"));
-            if (!currentNote.getUser().equals(user))
+            if (!currentNote.getUser().equals(user)) {
                 throw new RuntimeException("Authenticated user does not own this note.");
+            }
 
             note.setUser(user);
 
@@ -141,7 +148,6 @@ public class NoteServiceImpl implements NoteService {
 
                     // This could result in many extra db calls
                     // Could do a single call to get all the potential tags and iterate locally
-
                     Tag existingTag = tagRepository
                             .findByIdAndUserId(tag.getId(), user.getId())
                             .orElseThrow(() -> new RuntimeException("Tag with that id does not exist"));
@@ -172,12 +178,15 @@ public class NoteServiceImpl implements NoteService {
                 for (Tag tag : note.getTags()) {
                     long count = tags.size();
                     System.out.println(tag.getId());
-                    if (count == 1) tagRepository.delete(tag);
+                    if (count == 1) {
+                        tagRepository.delete(tag);
+                    }
                 }
             }
 
-            if (Objects.equals(user.getId(), note.getUser().getId()))
+            if (Objects.equals(user.getId(), note.getUser().getId())) {
                 noteRepository.deleteById(id);
+            }
         }
     }
 }
