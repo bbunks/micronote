@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "orm": "deno run --allow-run --allow-env --allow-read --allow-write --allow-sys npm:drizzle-kit",
+    "generate": "deno run --allow-run --allow-env --allow-read --allow-write --allow-sys npm:drizzle-kit generate",
+    "migrate": "deno run --allow-run --allow-env --allow-read --allow-write --allow-sys --allow-net npm:drizzle-kit migrate"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "drizzle-kit": "npm:drizzle-kit@^0.27.0",
+    "drizzle-orm": "npm:drizzle-orm@^0.36.0",
+    "mysql2": "npm:mysql2@^3.11.3"
+  },
+  "nodeModulesDir": "auto"
+}
